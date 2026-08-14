@@ -66,6 +66,18 @@ $econ_lcp_done = false; // First image gets fetchpriority high (LCP candidate).
 					<?php endforeach; ?>
 
 					<?php
+					/*
+					 * WP 6.7+ prepends `sizes="auto"` to every lazy-loaded image. That is
+					 * correct for images in normal document flow, but wrong inside a
+					 * carousel: slides 2+ are translated out of view, so when the browser
+					 * resolves `auto` it has no usable layout width and falls back to a
+					 * tiny srcset candidate — permanently, since it never re-fetches once
+					 * the slide scrolls in. The eager first slide never gets `auto`, which
+					 * is why only slide 1 stayed sharp. Disable the injection for this loop
+					 * and supply an explicit `sizes` matching the real media column.
+					 */
+					add_filter( 'wp_img_tag_add_auto_sizes', '__return_false' );
+
 					foreach ( $econ_featured as $econ_product ) :
 						$c                = econur_product_card_data( $econ_product );
 						$econ_init_var    = ! empty( $c['variations'] ) ? $c['variations'][0] : null;
@@ -88,6 +100,8 @@ $econ_lcp_done = false; // First image gets fetchpriority high (LCP candidate).
 												'decoding'      => 'async',
 												'fetchpriority' => $econ_priority ? 'high' : 'low',
 												'loading'       => $econ_priority ? 'eager' : 'lazy',
+												// Media column is ~half of the 1240px container from 880px up, full-bleed below.
+												'sizes'         => '(min-width: 880px) 620px, 100vw',
 											)
 										);
 									} else {
@@ -138,6 +152,7 @@ $econ_lcp_done = false; // First image gets fetchpriority high (LCP candidate).
 							</div>
 						</div>
 					<?php endforeach; ?>
+					<?php remove_filter( 'wp_img_tag_add_auto_sizes', '__return_false' ); ?>
 
 				</div>
 			</div>
