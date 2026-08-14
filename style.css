@@ -1,0 +1,189 @@
+/*
+Theme Name:        Econur
+Theme URI:         https://eco-nur.com
+Author:            Salesfind Marketing & IT
+Author URI:        https://salesfind.org
+Description:        Custom, mobile-first WooCommerce theme for Econur — handcrafted 100% natural soap, made in Bangladesh. Token-driven design system, Cash-on-Delivery only, and exactly three page templates (Homepage, Single Product, Lab Report). No page builder.
+Version:           0.1.0
+Requires at least: 6.4
+Requires PHP:      7.4
+WC requires at least: 8.0
+Text Domain:       econur
+License:           GNU General Public License v2 or later
+License URI:       http://www.gnu.org/licenses/gpl-2.0.html
+*/
+
+/* =============================================================================
+   ECONUR — ROOT DESIGN TOKENS
+   Single source of truth for colour, type, spacing and motion.
+   Swapping in the client's real tokens later MUST be a one-file change here.
+   No hard-coded hex/px values may live in templates or component CSS — every
+   value references these custom properties. (Master Prompt §3.1, §11)
+   ============================================================================= */
+:root {
+  /* --- Brand palette (verbatim from brand theme-color #0d3027, spec §3.1) --- */
+  --emerald: #10B981;
+  --emerald-dark: #059669;
+  --forest: #064E3B;
+  --forest-light: #065f46;
+  --mint: #6EE7B7;
+  --sage: #A7F3D0;
+  --pale: #ECFDF5;
+  --pale-2: #f0fdf8;
+  --white: #ffffff;
+
+  /* --- Glassmorphism surfaces --- */
+  --glass-bg: rgba(255, 255, 255, 0.737);
+  --glass-border: rgba(255, 255, 255, 0.75);
+  --glass-shadow: rgba(6, 78, 59, 0.1);
+
+  /* --- Text --- */
+  --text-dark: #0d3027;
+  --text-mid: #2d6a57;
+  --text-light: #478069;               /* darkened from #5a9e8a to meet WCAG AA (~4.6:1 on white) */
+
+  /* --- Typography families (self-hosted, font-display: swap — see fonts.css) --- */
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* --- Radii & motion --- */
+  --radius-card: 20px;
+  --radius-pill: 60px;
+  --section-gap: 90px;
+  --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --------------------------------------------------------------------------
+     EXTENSIONS — not in the brand snippet, added to make a complete system.
+     Kept token-driven so they remain swappable alongside the brand values.
+     -------------------------------------------------------------------------- */
+
+  /* Fluid type scale (clamp = mobile-first, avoids CLS from font resizing) */
+  --fs-hero: clamp(2.4rem, 6vw, 4.5rem);
+  --fs-h1: clamp(2rem, 4.5vw, 3.25rem);
+  --fs-h2: clamp(1.6rem, 3.5vw, 2.5rem);
+  --fs-h3: clamp(1.25rem, 2.5vw, 1.6rem);
+  --fs-body: clamp(1rem, 1.2vw, 1.075rem);
+  --fs-sm: 0.875rem;
+  --fs-xs: 0.75rem;
+
+  /* Weights */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 90px;
+
+  /* Layout */
+  --container: 1240px;
+  --container-narrow: 820px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --header-h: 72px;
+
+  /* Elevation — soft shadows over hard borders (spec §3.2) */
+  --shadow-sm: 0 2px 8px var(--glass-shadow);
+  --shadow-md: 0 10px 30px rgba(6, 78, 59, 0.10);
+  --shadow-lg: 0 24px 60px rgba(6, 78, 59, 0.16);
+
+  /* Z-index scale */
+  --z-header: 100;
+  --z-fab: 150;
+  --z-drawer: 200;
+  --z-modal: 300;
+
+  /* Semantic one-offs (kept as tokens so NO raw hex lives in component CSS) */
+  --whatsapp: #25D366;                 /* WhatsApp brand green — footer social only */
+  --scrim: rgba(6, 78, 59, 0.35);      /* drawer/modal backdrop (forest @ 35%) */
+
+  /* Order CTA — the single, unique main call-to-action treatment. This gradient
+     + glow is reserved EXCLUSIVELY for the .econ-btn--order button and appears
+     on no other control, so the primary "Order" action never reads as ambiguous. */
+  --order-grad-a: #16d3a0;             /* bright mint-emerald */
+  --order-grad-b: var(--emerald-dark);
+  --order-shadow: 0 6px 18px rgba(16, 185, 129, 0.38);
+  --order-shadow-strong: 0 12px 28px rgba(16, 185, 129, 0.5);
+}
+
+/* =============================================================================
+   BASE / RESET  (minimal, modern — component styles live in assets/css/*.css)
+   ============================================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  background: var(--pale-2);
+  color: var(--text-dark);
+  overflow-x: clip;
+  -webkit-overflow-scrolling: touch;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  line-height: 1.12;
+  color: var(--text-dark);
+  margin: 0 0 var(--space-4);
+}
+
+p { margin: 0 0 var(--space-4); }
+
+a {
+  color: var(--forest-light);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+a:hover { color: var(--emerald-dark); }
+
+img, svg, video { max-width: 100%; height: auto; display: block; }
+
+button { font-family: inherit; cursor: pointer; }
+
+/* Accessible focus ring — visible for keyboard users, not mouse */
+:focus-visible { outline: 3px solid var(--emerald); outline-offset: 2px; }
+
+/* Respect reduced-motion: motion must never cost frame budget on low-end
+   Android devices common in the target market. (spec §3.2) */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Shared layout helper */
+.econ-container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Screen-reader-only utility (a11y) */
+.screen-reader-text {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0);
+  white-space: nowrap; border: 0;
+}

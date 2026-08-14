@@ -1,0 +1,106 @@
+/* =============================================================================
+   ECONUR — SINGLE PRODUCT
+   Loaded only on product pages. Mobile-first, token-driven.
+   Shared card/size/section-head styles come from components.css.
+   ============================================================================= */
+
+.econ-product__notices { padding-top: var(--space-4); }
+.econ-product__notices:empty { display: none; }
+
+/* -------------------------------------------------------------------------
+ * Hero
+ * ---------------------------------------------------------------------- */
+.econ-product-hero { padding-block: clamp(24px, 5vw, 56px); }
+.econ-product-hero__grid { display: grid; grid-template-columns: 1fr; gap: var(--space-6); align-items: start; }
+
+.econ-gallery { display: flex; flex-direction: column; gap: var(--space-3); }
+.econ-gallery__main { border-radius: var(--radius-card); overflow: hidden; background: linear-gradient(160deg, var(--pale), var(--sage)); }
+.econ-gallery__img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+.econ-gallery__thumbs { display: flex; gap: var(--space-2); overflow-x: auto; scrollbar-width: none; }
+.econ-gallery__thumbs::-webkit-scrollbar { display: none; }
+.econ-gallery__thumb {
+  flex: 0 0 auto; width: 68px; height: 68px; padding: 0;
+  border: 2px solid transparent; border-radius: 14px; overflow: hidden;
+  background: var(--pale); cursor: pointer; transition: border-color var(--transition);
+}
+.econ-gallery__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.econ-gallery__thumb.is-active { border-color: var(--emerald); }
+
+.econ-product-hero__title { font-size: var(--fs-h1); margin: var(--space-2) 0 var(--space-3); }
+.econ-product-hero__lead { font-size: 1.1rem; color: var(--text-mid); margin: 0 0 var(--space-4); }
+.econ-product-hero__price { font-size: 1.7rem; font-weight: var(--fw-bold); color: var(--forest); margin-bottom: var(--space-2); }
+
+.econ-stock { font-size: var(--fs-sm); font-weight: var(--fw-semibold); margin: 0 0 var(--space-5); display: inline-flex; align-items: center; gap: 6px; }
+.econ-stock::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.econ-stock.is-in { color: var(--emerald-dark); }
+.econ-stock.is-out { color: var(--text-light); }
+
+.econ-field { margin-bottom: var(--space-5); }
+.econ-field__label { display: block; font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--text-mid); margin-bottom: var(--space-2); }
+
+.econ-product-hero__buy { display: flex; gap: var(--space-3); align-items: stretch; margin-bottom: var(--space-2); }
+.econ-qty__input {
+  width: 72px; height: 100%; min-height: 52px; padding: 0 12px;
+  border: 1.5px solid var(--sage); border-radius: var(--radius-pill);
+  font-family: var(--font-body); font-size: 1rem; text-align: center; color: var(--text-dark);
+  background: var(--white);
+}
+.econ-qty__input:focus { outline: none; border-color: var(--emerald); }
+.econ-product-hero__buy .econ-btn--order { flex: 1; }
+.econ-product-hero__info .econ-btn--block { margin-bottom: var(--space-3); }
+.econ-product-hero__meta { font-size: var(--fs-sm); color: var(--text-light); margin: 0; }
+
+@media (min-width: 860px) {
+  .econ-product-hero__grid { grid-template-columns: 1fr 1fr; gap: var(--space-8); }
+  .econ-gallery { position: sticky; top: calc(var(--header-h) + var(--space-4)); }
+}
+
+/* -------------------------------------------------------------------------
+ * Content sections (narrow, readable measure)
+ * ---------------------------------------------------------------------- */
+.econ-product-section { max-width: var(--container-narrow); margin-inline: auto; padding: var(--space-6) var(--gutter); }
+.econ-product-h2 { font-size: var(--fs-h3); margin: 0 0 var(--space-4); }
+
+.econ-prose { color: var(--text-mid); line-height: 1.75; }
+.econ-prose p { margin: 0 0 var(--space-4); }
+.econ-prose p:last-child { margin-bottom: 0; }
+
+/* Benefit chips */
+.econ-benefits { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: var(--space-3); }
+.econ-benefit { display: flex; align-items: flex-start; gap: var(--space-3); color: var(--text-dark); }
+.econ-benefit__icon {
+  flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%; background: var(--pale); color: var(--emerald-dark);
+}
+.econ-benefit__icon .econ-icon { width: 18px; height: 18px; }
+@media (min-width: 620px) { .econ-benefits { grid-template-columns: 1fr 1fr; gap: var(--space-4); } }
+
+/* Efficacy blocks */
+.econ-efficacy { display: grid; grid-template-columns: 1fr; gap: var(--space-5); }
+.econ-efficacy__item { padding-inline-start: var(--space-4); border-inline-start: 3px solid var(--sage); }
+.econ-efficacy__heading { font-family: var(--font-display); font-size: 1.2rem; margin: 0 0 6px; color: var(--forest); }
+.econ-efficacy__text { margin: 0; color: var(--text-mid); }
+@media (min-width: 720px) { .econ-efficacy { grid-template-columns: 1fr 1fr; gap: var(--space-6); } }
+
+/* Tag lists (what's inside / best for) */
+.econ-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.econ-tag { font-size: var(--fs-sm); color: var(--text-mid); border: 1px solid var(--sage); padding: 8px 16px; border-radius: var(--radius-pill); }
+.econ-tag--filled { background: var(--pale); border-color: transparent; color: var(--forest); }
+
+/* -------------------------------------------------------------------------
+ * Closing CTA band
+ * ---------------------------------------------------------------------- */
+.econ-product-cta { margin-top: var(--space-7); background: linear-gradient(140deg, var(--forest), var(--forest-light)); color: var(--white); padding-block: clamp(40px, 7vw, 80px); }
+.econ-product-cta__inner { max-width: 680px; margin: 0 auto; text-align: center; }
+.econ-product-cta__title { color: var(--white); font-size: var(--fs-h2); margin: 0 0 var(--space-3); }
+.econ-product-cta__sub { color: var(--sage); margin: 0 0 var(--space-6); }
+.econ-product-cta__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: center; }
+.econ-product-cta__actions .econ-cta__ghost { color: var(--white); border-color: var(--sage); }
+.econ-product-cta__actions .econ-cta__ghost:hover { background: var(--white); color: var(--forest); }
+
+/* -------------------------------------------------------------------------
+ * Related
+ * ---------------------------------------------------------------------- */
+.econ-related__grid { display: grid; grid-template-columns: 1fr; gap: var(--space-4); }
+@media (min-width: 520px) { .econ-related__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-5); } }
+@media (min-width: 900px) { .econ-related__grid { grid-template-columns: repeat(3, 1fr); } }

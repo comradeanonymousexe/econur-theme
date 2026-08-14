@@ -1,0 +1,328 @@
+/* =============================================================================
+   ECONUR — WOOCOMMERCE BRAND OVERRIDES
+   Loaded only on cart / checkout / My Account, on TOP of WooCommerce's base CSS.
+   Token-driven brand touches — not a full re-implementation. (spec §8)
+   ============================================================================= */
+
+/* ---- Buttons ---- */
+.woocommerce .button,
+.woocommerce button.button,
+.woocommerce input.button,
+.woocommerce a.button {
+  background: var(--forest);
+  color: var(--white);
+  border: 0;
+  border-radius: var(--radius-pill);
+  padding: 14px 26px;
+  font-family: var(--font-body);
+  font-weight: var(--fw-semibold);
+  transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+.woocommerce .button:hover,
+.woocommerce button.button:hover,
+.woocommerce input.button:hover,
+.woocommerce a.button:hover {
+  background: var(--forest-light);
+  color: var(--white);
+  box-shadow: var(--shadow-md);
+}
+
+/* The checkout "Place order" button IS the ultimate Order CTA → the unique style. */
+.woocommerce #place_order,
+.woocommerce button.button.alt {
+  background: linear-gradient(135deg, var(--order-grad-a), var(--order-grad-b));
+  color: var(--white);
+  font-weight: var(--fw-bold);
+  box-shadow: var(--order-shadow);
+  padding: 16px 30px;
+}
+.woocommerce #place_order:hover,
+.woocommerce button.button.alt:hover {
+  background: linear-gradient(135deg, var(--order-grad-a), var(--order-grad-b));
+  transform: translateY(-2px);
+  box-shadow: var(--order-shadow-strong);
+}
+
+/* ---- Form fields ---- */
+.woocommerce form .form-row input.input-text,
+.woocommerce form .form-row textarea,
+.woocommerce .select2-container--default .select2-selection--single,
+.woocommerce form .form-row select {
+  border: 1.5px solid var(--sage);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  background: var(--white);
+}
+.woocommerce form .form-row input.input-text:focus,
+.woocommerce form .form-row textarea:focus,
+.woocommerce form .form-row select:focus {
+  outline: none;
+  border-color: var(--emerald);
+  box-shadow: 0 0 0 3px var(--pale);
+}
+.woocommerce form .form-row label { font-weight: var(--fw-semibold); color: var(--text-mid); }
+
+/* ---- Notices ---- */
+.woocommerce-message,
+.woocommerce-info,
+.woocommerce-error li,
+.woocommerce-noreviews {
+  border-radius: 12px;
+  border-top: 0;
+  border-left: 4px solid var(--emerald);
+  background: var(--pale);
+  color: var(--text-dark);
+}
+.woocommerce-error { border: 0; padding: 0; }
+.woocommerce-error li { border-left-color: #b0413e; background: #fcefee; list-style: none; padding: 12px 16px; margin-bottom: 8px; }
+.woocommerce-message::before,
+.woocommerce-info::before { color: var(--emerald-dark); }
+
+/* ---- COD trust notice ---- */
+.econ-cod-notice {
+  background: var(--pale);
+  border: 1px solid var(--sage);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: var(--space-4);
+  font-size: var(--fs-sm);
+  color: var(--text-mid);
+}
+.econ-cod-notice strong { color: var(--forest); }
+
+/* ---- Cart / checkout tables ---- */
+.woocommerce table.shop_table {
+  border-radius: var(--radius-card);
+  border-color: var(--pale);
+}
+.woocommerce table.shop_table th { color: var(--text-dark); }
+.woocommerce-cart table.cart img { border-radius: 10px; }
+.woocommerce .cart_totals h2,
+.woocommerce-checkout #order_review_heading,
+.woocommerce-checkout h3 { font-family: var(--font-display); color: var(--text-dark); }
+
+/* ---- My Account ---- */
+.woocommerce-account .woocommerce-MyAccount-navigation ul { list-style: none; margin: 0 0 var(--space-5); padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.woocommerce-account .woocommerce-MyAccount-navigation li a {
+  display: inline-block; padding: 8px 16px; border-radius: var(--radius-pill);
+  background: var(--pale); color: var(--text-mid); font-weight: var(--fw-medium);
+}
+.woocommerce-account .woocommerce-MyAccount-navigation li.is-active a { background: var(--forest); color: var(--white); }
+
+.econ-account-extra { border: 1px solid var(--sage); border-radius: var(--radius-card); padding: var(--space-4) var(--space-5); margin: var(--space-4) 0; }
+.econ-account-extra legend { font-weight: var(--fw-semibold); color: var(--forest); padding: 0 8px; }
+.econ-account-nudge {
+  background: var(--pale); border-radius: 12px; padding: 14px 16px; margin-bottom: var(--space-5);
+  color: var(--text-mid); font-size: var(--fs-sm);
+}
+.econ-account-nudge a { font-weight: var(--fw-semibold); }
+
+/* Value-ladder recommendation (rendered by the CRM plugin, spec §6) */
+.econ-account-reco { margin: var(--space-5) 0; }
+.econ-account-reco h3 { font-size: var(--fs-h3); margin: 0 0 var(--space-3); }
+.econ-account-reco__card { display: flex; align-items: center; gap: var(--space-4); background: var(--white); border: 1px solid var(--sage); border-radius: var(--radius-card); padding: var(--space-4); max-width: 420px; transition: border-color var(--transition), box-shadow var(--transition); }
+.econ-account-reco__card:hover { border-color: var(--emerald); box-shadow: var(--shadow-md); }
+.econ-account-reco__card img { width: 72px; height: 72px; object-fit: cover; border-radius: 12px; }
+.econ-account-reco__body { display: flex; flex-direction: column; gap: 4px; }
+.econ-account-reco__name { font-weight: var(--fw-semibold); color: var(--text-dark); }
+.econ-account-reco__badge { align-self: flex-start; background: var(--pale); color: var(--forest); font-size: var(--fs-xs); font-weight: var(--fw-bold); padding: 3px 10px; border-radius: var(--radius-pill); }
+
+/* ---- Thank-you ---- */
+.econ-thankyou__panel {
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto var(--space-7);
+  background: var(--white);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-7) var(--space-6);
+}
+.econ-thankyou__check {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--pale); color: var(--emerald-dark); margin-bottom: var(--space-4);
+}
+.econ-thankyou__check .econ-icon { width: 34px; height: 34px; }
+.econ-thankyou__title { font-size: var(--fs-h1); margin: 0 0 var(--space-3); }
+.econ-thankyou__lead { color: var(--text-mid); margin: 0 0 var(--space-5); }
+.econ-thankyou__meta { list-style: none; margin: 0 0 var(--space-5); padding: var(--space-4) 0; border-top: 1px solid var(--pale); border-bottom: 1px solid var(--pale); display: grid; gap: 10px; }
+.econ-thankyou__meta li { display: flex; justify-content: space-between; gap: var(--space-4); }
+.econ-thankyou__meta-label { color: var(--text-light); }
+.econ-thankyou__meta-value { font-weight: var(--fw-semibold); color: var(--text-dark); }
+.econ-thankyou__actions { margin: 0; }
+.econ-thankyou__panel.is-failed .econ-thankyou__title { color: var(--text-dark); }
+
+/* ---- Accounts: sign in / register (spec §6) ----
+   One panel at a time, switched by the segmented control. The active panel is
+   chosen by [data-view] on the wrapper, which the server sets — so this works
+   with JavaScript off; account.js only makes the switch instant. */
+.econ-auth { max-width: 480px; margin: 0 auto var(--space-6); }
+
+.econ-auth__switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: var(--space-5);
+  background: var(--pale);
+  border-radius: var(--radius-pill);
+}
+.econ-auth__tab {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 44px; /* Comfortable tap target. */
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-pill);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-sm);
+  color: var(--text-mid);
+  text-align: center;
+  transition: background var(--transition), color var(--transition), box-shadow var(--transition);
+}
+.econ-auth__tab:hover { color: var(--forest); }
+.econ-auth__tab[aria-selected="true"] {
+  background: var(--white);
+  color: var(--forest);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Only the panel matching the current view is rendered. */
+.econ-auth[data-view="login"] [data-econ-auth-panel="register"],
+.econ-auth[data-view="register"] [data-econ-auth-panel="login"] { display: none; }
+
+.econ-auth__panel {
+  background: var(--white);
+  border: 1px solid var(--pale);
+  border-radius: var(--radius-card);
+  padding: var(--space-5);
+}
+.econ-auth__title { font-family: var(--font-display); font-size: var(--fs-h3); margin: 0 0 var(--space-2); }
+.econ-auth__crosslink {
+  margin: var(--space-4) 0 0;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--pale);
+  font-size: var(--fs-sm);
+  color: var(--text-mid);
+  text-align: center;
+}
+.econ-auth__crosslink a { font-weight: var(--fw-semibold); }
+.econ-auth__lead { color: var(--text-mid); font-size: var(--fs-sm); margin: 0 0 var(--space-4); }
+.econ-auth .form-row { margin-bottom: var(--space-4); }
+.econ-auth label { display: block; font-weight: var(--fw-medium); margin-bottom: 6px; }
+.econ-auth input[type="text"],
+.econ-auth input[type="tel"],
+.econ-auth input[type="date"],
+.econ-auth input[type="email"],
+.econ-auth input[type="password"] { width: 100%; }
+.econ-auth__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+.econ-auth__actions .econ-btn { flex: 1 1 auto; min-height: 48px; } /* Comfortable tap target. */
+.econ-auth__actions label { display: inline-flex; align-items: center; gap: 8px; margin: 0; font-weight: var(--fw-regular); color: var(--text-mid); }
+.econ-auth .woocommerce-LostPassword { margin: 0; font-size: var(--fs-sm); }
+
+.econ-field-hint { display: block; margin-top: 6px; font-size: var(--fs-xs); color: var(--text-light); line-height: 1.5; }
+.econ-optional { color: var(--text-light); font-weight: var(--fw-regular); }
+
+.econ-register-extra { border: 1px dashed var(--sage); border-radius: 14px; padding: var(--space-4); margin: 0 0 var(--space-4); }
+.econ-register-extra legend { font-weight: var(--fw-semibold); color: var(--forest); padding: 0 8px; font-size: var(--fs-sm); }
+.econ-register-extra .econ-field-hint { margin: 0 0 var(--space-3); }
+
+@media (min-width: 860px) {
+  .econ-auth__panel { padding: var(--space-6); }
+}
+
+/* ---- Post-checkout account claim ---- */
+.econ-claim {
+  max-width: 560px;
+  margin: 0 auto var(--space-7);
+  background: var(--pale-2);
+  border: 1px solid var(--sage);
+  border-radius: var(--radius-card);
+  padding: var(--space-5);
+}
+.econ-claim__title { font-family: var(--font-display); font-size: var(--fs-h3); margin: 0 0 var(--space-2); }
+.econ-claim__lead { color: var(--text-mid); font-size: var(--fs-sm); margin: 0 0 var(--space-4); }
+.econ-claim__row { margin: 0 0 var(--space-4); }
+.econ-claim__row label { display: block; font-weight: var(--fw-medium); margin-bottom: 6px; }
+.econ-claim__row input { width: 100%; }
+.econ-claim .econ-btn { width: 100%; min-height: 48px; }
+.econ-claim__skip { margin: var(--space-3) 0 0; font-size: var(--fs-xs); color: var(--text-light); text-align: center; }
+
+.econ-account-nudge--warn { background: var(--sage); color: var(--forest); }
+
+/* ---- Profile (My Account dashboard) ---- */
+.econ-btn--sm { padding: 10px 18px; font-size: var(--fs-sm); }
+
+.econ-profile__header { margin-bottom: var(--space-5); }
+.econ-profile__greeting { font-family: var(--font-display); font-size: var(--fs-h2); margin: 0 0 6px; }
+.econ-profile__sub { color: var(--text-mid); margin: 0; }
+
+.econ-profile__section { margin-bottom: var(--space-6); }
+.econ-profile__section-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-4); }
+.econ-profile__heading { font-family: var(--font-display); font-size: var(--fs-h3); margin: 0; }
+.econ-profile__more { font-size: var(--fs-sm); font-weight: var(--fw-semibold); white-space: nowrap; }
+.econ-profile__empty { background: var(--white); border: 1px solid var(--pale); border-radius: var(--radius-card); padding: var(--space-5); text-align: center; }
+.econ-profile__empty p { color: var(--text-mid); margin: 0 0 var(--space-4); }
+
+/* ---- Offers ---- */
+.econ-offers__list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+.econ-offers__link {
+  display: flex; align-items: center; gap: var(--space-4);
+  background: var(--white); border: 1px solid var(--sage);
+  border-radius: var(--radius-card); padding: var(--space-3) var(--space-4);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.econ-offers__link:hover { border-color: var(--emerald); box-shadow: var(--shadow-md); }
+.econ-offers__link img { width: 64px; height: 64px; object-fit: cover; border-radius: 12px; flex: 0 0 auto; }
+.econ-offers__body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.econ-offers__badge { align-self: flex-start; background: var(--forest); color: var(--white); font-size: var(--fs-xs); font-weight: var(--fw-bold); padding: 3px 10px; border-radius: var(--radius-pill); }
+.econ-offers__name { font-weight: var(--fw-semibold); color: var(--text-dark); }
+.econ-offers__price { color: var(--text-mid); font-size: var(--fs-sm); }
+
+/* ---- Recent orders ---- */
+.econ-orders { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+.econ-orders__item {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: var(--space-3) var(--space-4);
+  align-items: center;
+  background: var(--white);
+  border: 1px solid var(--pale);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+}
+.econ-orders__thumb img { width: 64px; height: 64px; object-fit: cover; border-radius: 12px; display: block; }
+.econ-orders__body { min-width: 0; }
+.econ-orders__title { font-weight: var(--fw-semibold); color: var(--text-dark); margin: 0 0 6px; }
+.econ-orders__more { font-weight: var(--fw-regular); color: var(--text-light); font-size: var(--fs-sm); }
+.econ-orders__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px var(--space-3); margin: 0; font-size: var(--fs-sm); color: var(--text-mid); }
+.econ-orders__status {
+  font-size: var(--fs-xs); font-weight: var(--fw-bold);
+  padding: 3px 10px; border-radius: var(--radius-pill);
+  background: var(--pale); color: var(--forest);
+}
+.econ-orders__status--completed { background: var(--sage); }
+.econ-orders__status--cancelled,
+.econ-orders__status--failed { background: var(--pale); color: var(--text-light); }
+/* Actions drop to their own full-width row on narrow screens. */
+.econ-orders__actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.econ-orders__actions .econ-btn { flex: 1 1 auto; min-height: 44px; }
+
+@media (min-width: 720px) {
+  .econ-orders__item { grid-template-columns: 64px 1fr auto; }
+  .econ-orders__actions { grid-column: auto; flex-wrap: nowrap; }
+  .econ-orders__actions .econ-btn { flex: 0 0 auto; }
+}
+
+/* ---- Details ---- */
+.econ-details { margin: 0; display: grid; gap: 0; background: var(--white); border: 1px solid var(--pale); border-radius: var(--radius-card); overflow: hidden; }
+.econ-details__row { display: grid; gap: 2px; padding: var(--space-4); border-bottom: 1px solid var(--pale); }
+.econ-details__row:last-child { border-bottom: 0; }
+.econ-details__row dt { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-light); }
+.econ-details__row dd { margin: 0; color: var(--text-dark); }
+.econ-details__missing { color: var(--text-light); font-style: italic; }
+.econ-details__edit { display: inline-block; margin-top: 6px; font-size: var(--fs-sm); font-weight: var(--fw-semibold); }
+
+@media (min-width: 720px) {
+  .econ-details__row { grid-template-columns: 200px 1fr; gap: var(--space-4); align-items: baseline; }
+}

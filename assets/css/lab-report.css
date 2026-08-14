@@ -1,0 +1,77 @@
+/* =============================================================================
+   ECONUR — LAB REPORT
+   Loaded only on the Lab Report page template. Mobile-first, token-driven.
+   ============================================================================= */
+
+.econ-lab-section { padding-block: var(--space-7); }
+.econ-lab-h2 { font-size: var(--fs-h2); text-align: center; margin: 0 auto var(--space-6); max-width: 30ch; }
+
+/* Hero */
+.econ-lab-hero { background: linear-gradient(180deg, var(--pale), var(--pale-2)); padding-block: clamp(40px, 8vw, 90px); }
+.econ-lab-hero__inner { max-width: 760px; margin: 0 auto; text-align: center; }
+.econ-lab-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--white); color: var(--forest);
+  font-size: var(--fs-sm); font-weight: var(--fw-semibold);
+  padding: 8px 16px; border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-sm); margin-bottom: var(--space-4);
+}
+.econ-lab-badge .econ-icon { width: 18px; height: 18px; color: var(--emerald-dark); }
+.econ-lab-hero__title { font-size: var(--fs-h1); margin: 0 0 var(--space-4); }
+.econ-lab-hero__lead { font-size: 1.1rem; color: var(--text-mid); margin: 0; }
+
+/* Stat cards */
+.econ-lab-stats { display: grid; grid-template-columns: 1fr; gap: var(--space-4); }
+.econ-lab-stat {
+  background: var(--white); border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm); padding: var(--space-6);
+  text-align: center; display: flex; flex-direction: column; gap: 6px;
+  border-top: 4px solid var(--emerald);
+}
+.econ-lab-stat__value { font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3rem); font-weight: var(--fw-bold); color: var(--forest); line-height: 1; }
+.econ-lab-stat__label { font-size: var(--fs-sm); font-weight: var(--fw-semibold); letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-light); }
+@media (min-width: 700px) { .econ-lab-stats { grid-template-columns: repeat(3, 1fr); gap: var(--space-5); } }
+
+/* Explainers */
+.econ-lab-explainers { display: grid; grid-template-columns: 1fr; gap: var(--space-5); }
+.econ-lab-explainer { background: var(--white); border-radius: var(--radius-card); padding: var(--space-6); box-shadow: var(--shadow-sm); }
+.econ-lab-explainer__title { font-size: var(--fs-h3); color: var(--forest); margin: 0 0 var(--space-3); }
+.econ-lab-explainer p { color: var(--text-mid); margin: 0; }
+@media (min-width: 760px) { .econ-lab-explainers { grid-template-columns: 1fr 1fr; gap: var(--space-6); } }
+
+/* Comparison table */
+.econ-compare-wrap { overflow-x: auto; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); }
+.econ-compare { width: 100%; border-collapse: collapse; background: var(--white); min-width: 520px; }
+.econ-compare th, .econ-compare td { padding: var(--space-4); text-align: left; font-size: var(--fs-sm); border-bottom: 1px solid var(--pale); }
+.econ-compare thead th { background: var(--forest); color: var(--white); font-weight: var(--fw-semibold); }
+.econ-compare thead th:first-child { border-top-left-radius: var(--radius-card); }
+.econ-compare thead th:last-child { border-top-right-radius: var(--radius-card); }
+.econ-compare tbody th { font-weight: var(--fw-semibold); color: var(--text-dark); background: var(--pale-2); }
+.econ-compare td { color: var(--text-mid); }
+.econ-compare td.is-good { color: var(--forest); font-weight: var(--fw-semibold); }
+.econ-compare tbody tr:last-child th, .econ-compare tbody tr:last-child td { border-bottom: 0; }
+
+/* Econur difference band */
+.econ-lab-diff { background: linear-gradient(140deg, var(--forest), var(--forest-light)); color: var(--white); padding-block: clamp(40px, 7vw, 80px); margin-block: var(--space-7); }
+.econ-lab-diff__inner { max-width: 680px; margin: 0 auto; text-align: center; }
+.econ-lab-diff__title { color: var(--white); font-size: var(--fs-h2); margin: 0 0 var(--space-3); }
+.econ-lab-diff__inner p { color: var(--sage); font-size: 1.1rem; margin: 0; }
+
+/* Downloads */
+.econ-lab-downloads { display: grid; grid-template-columns: 1fr; gap: var(--space-4); max-width: 720px; margin: 0 auto; }
+.econ-lab-download {
+  display: flex; align-items: center; gap: var(--space-4);
+  background: var(--white); border: 1.5px solid var(--sage);
+  border-radius: var(--radius-card); padding: var(--space-5);
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+.econ-lab-download:hover { border-color: var(--emerald); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.econ-lab-download__icon {
+  flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; border-radius: var(--radius-pill);
+  background: var(--pale); color: var(--emerald-dark);
+}
+.econ-lab-download__text { display: flex; flex-direction: column; }
+.econ-lab-download__title { font-weight: var(--fw-semibold); color: var(--text-dark); }
+.econ-lab-download__meta { font-size: var(--fs-sm); color: var(--text-light); }
+@media (min-width: 640px) { .econ-lab-downloads { grid-template-columns: 1fr 1fr; } }
