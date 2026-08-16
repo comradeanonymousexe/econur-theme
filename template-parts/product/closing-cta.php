@@ -24,8 +24,8 @@ $econ_init_var_id = ! empty( $econ_data['variations'] ) ? $econ_data['variations
 	<div class="econ-container econ-product-cta__inner" data-econ-buybox>
 		<h2 class="econ-product-cta__title">
 			<?php
-			/* translators: %s: product name. */
-			printf( esc_html__( 'Ready to try %s?', 'econur' ), esc_html( $econ_product->get_name() ) );
+			/* translators: %s: product name — wrapped so GTranslate leaves it in English. */
+			printf( esc_html__( 'Ready to try %s?', 'econur' ), econur_notranslate( $econ_product->get_name() ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- format string escaped, name escaped inside the helper.
 			?>
 		</h2>
 		<p class="econ-product-cta__sub"><?php esc_html_e( 'Honest, lab-verified soap. Cash on delivery, nationwide across Bangladesh.', 'econur' ); ?></p>

@@ -43,6 +43,93 @@ function econur_icon( $name, $class = 'econ-icon' ) {
 }
 
 /**
+ * Wrap text that machine translation must leave in English (GTranslate).
+ *
+ * Product names, the brand name and the lab acronyms are proper nouns. A Bangla
+ * rendering of "Active Defense Bar" makes the product unrecognisable to a
+ * customer who saw it on Facebook and unsearchable on the site, so those stay
+ * in English regardless of the visitor's chosen language.
+ *
+ * Emits BOTH markers on purpose: GTranslate keys off the `notranslate` class,
+ * while `translate="no"` is the HTML standard that Chrome's built-in translator
+ * and Google's own widget honour. Belt and braces — they cost nothing.
+ *
+ * Returns escaped HTML, so pass raw text and echo the result directly.
+ *
+ * @param string $text Raw text to protect.
+ * @param string $tag  Wrapping element (defaults to span).
+ * @return string Escaped, wrapped HTML; empty string for empty input.
+ */
+function econur_notranslate( $text, $tag = 'span' ) {
+	$text = (string) $text;
+	if ( '' === trim( $text ) ) {
+		return '';
+	}
+
+	$tag = preg_replace( '/[^a-z0-9]/', '', strtolower( (string) $tag ) );
+	if ( '' === $tag ) {
+		$tag = 'span';
+	}
+
+	return sprintf(
+		'<%1$s class="notranslate" translate="no">%2$s</%1$s>',
+		$tag,
+		esc_html( $text )
+	);
+}
+
+/**
+ * Protect specific terms inside an ALREADY-ESCAPED string.
+ *
+ * Lab acronyms (TFM, BCSIR, BUET) appear mid-sentence. Splitting those
+ * sentences into printf fragments just to wrap three letters would make them
+ * painful for a human translator too, so instead we swap the terms inside the
+ * finished string. Institution acronyms especially must survive: a translated
+ * "BCSIR" makes the certification impossible to verify.
+ *
+ * Caveat: terms are matched literally and case-sensitively against markup that
+ * already contains `class="notranslate" translate="no"`. Use it for distinctive
+ * terms (acronyms, proper nouns) — never for short common words.
+ *
+ * @param string   $escaped_text Text that has already been escaped.
+ * @param string[] $terms        Terms to protect.
+ * @return string
+ */
+function econur_notranslate_terms( $escaped_text, array $terms ) {
+	// Longest first, so a term that contains another is handled before its substring.
+	usort(
+		$terms,
+		static function ( $a, $b ) {
+			return strlen( $b ) - strlen( $a );
+		}
+	);
+
+	foreach ( $terms as $term ) {
+		if ( '' === $term ) {
+			continue;
+		}
+		$escaped_text = str_replace( $term, econur_notranslate( $term ), $escaped_text );
+	}
+
+	return $escaped_text;
+}
+
+/**
+ * The terms that always stay in English sitewide.
+ *
+ * Deliberately excludes ingredient names — "Neem" → "নিম" is genuinely useful
+ * to a Bangla reader, so those SHOULD translate.
+ *
+ * @return string[]
+ */
+function econur_untranslatable_terms() {
+	return apply_filters(
+		'econur_untranslatable_terms',
+		array( 'BCSIR', 'BUET', 'TFM', 'Econur', 'WhatsApp' )
+	);
+}
+
+/**
  * Primary menu fallback when no menu is assigned in Appearance → Menus.
  * Keeps the header usable out-of-the-box.
  */

@@ -264,3 +264,93 @@ Fixes applied:
 
 Behaviour note (by design, not a bug): **"Order Now" is buy-now** — it adds to the existing
 cart and goes straight to checkout.
+
+---
+
+## 13. Round 2 — live-site findings and changes (2026-08-15)
+
+### 13.1 Checkout is BLOCK-based — `inc/checkout.php` is inert (DEFERRED by client, 2026-08-15)
+
+Verified against the live site (`eco-nur.com/checkout/`): the checkout page renders the
+**WooCommerce checkout block**, not the classic `[woocommerce_checkout]` shortcode.
+
+Everything in `inc/checkout.php` targets classic-only hooks and therefore **does not run**:
+
+| Intended behaviour (spec §5) | Hook used | Live status |
+|---|---|---|
+| Trim fields (drop last name / address 2 / postcode / state) | `woocommerce_checkout_fields` | ❌ ignored — all still render |
+| Phone required + labelled "Mobile number" | `woocommerce_checkout_fields` | ❌ renders as "Phone (optional)" |
+| Bangladeshi phone validation | `woocommerce_after_checkout_validation` | ❌ never fires |
+| COD trust notice | `woocommerce_review_order_before_payment` | ❌ absent from the DOM |
+
+**Client decision (2026-08-15): leave as-is for now.** Checkout runs on stock WooCommerce
+block fields. Accepted consequences, to revisit before launch:
+
+- Checkout collects more fields than spec §5 calls for (last name, address 2, postcode).
+- **Phone is optional and unvalidated.** This one has teeth: the CRM unifies customers by
+  billing phone (§4/§7.1) and the WhatsApp reminder engine keys its `wa.me` links on it.
+  Orders placed without a phone, or with a malformed one, will not produce a usable
+  reminder contact. Worth watching in the first real orders.
+- No COD trust notice on the payment step.
+
+`inc/checkout.php` is left in place but **dead** — do not assume its rules are in force when
+debugging checkout. Two ways to revive it when the client is ready:
+1. **Port to the block checkout.** Field trimming/relabelling moves to the Checkout Fields
+   API / `woocommerce_blocks_checkout_*` filters; validation moves to the Store API. Keeps
+   the modern checkout. Note some core field removals are restricted on the block checkout.
+2. **Revert the page to the classic shortcode.** Replace the page content with
+   `[woocommerce_checkout]` — every existing customisation revives untouched, zero code.
+
+### 13.2 Showcase carousel: slides 2+ loaded low-res (FIXED)
+
+WP 6.7+ prepends `sizes="auto"` to every `loading="lazy"` image. Carousel slides are
+translated out of view inside `overflow:hidden`, so `auto` had no resolvable layout width
+and the browser picked a tiny srcset candidate — permanently, as it never re-fetches.
+Only slide 1 escaped it (`loading="eager"` → no `auto`), which is why the symptom followed
+slide position rather than the product.
+
+Fix: `wp_img_tag_add_auto_sizes` disabled around the featured-slide loop plus an explicit
+`sizes="(min-width: 880px) 620px, 100vw"`. Slides stay lazy — the perf budget in §9 holds.
+_(template-parts/homepage/showcase.php)_
+
+Other lazy images (`card.php`, gallery thumbs in `hero.php`) are in normal document flow,
+where `auto` resolves correctly. Left alone deliberately.
+
+### 13.3 Single-product section order changed (client request)
+
+Now: Hero → Best for → What's inside → What it does for your skin → Why it works →
+Usage & storage → Description → Closing CTA → Related. The Description (Woo product
+description) moved from second to last and gained an **"About this bar"** `<h2>`, which it
+previously lacked — it was the only section with no heading, so screen-reader users
+navigating by heading skipped it entirely. _(woocommerce/single-product.php, intro.php)_
+
+The `Product section N` docblocks were renumbered to match. The `spec §4.2.x` references
+are intentionally now out of sequence — they point at the spec, not the render order.
+
+### 13.4 Checkout "Reference" field (NEW — plugin-owned)
+
+Captures who referred the customer. Registered in the **plugin**, not the theme: referral
+source is CRM attribution data, and the plugin owns all CRM data so it survives a theme
+redesign (plugin header, §7.1).
+
+- Registered via the **Additional Checkout Fields API** (`woocommerce_register_additional_checkout_field`),
+  the only supported way to add a field to the block checkout. Location `order`, optional,
+  100-char cap, sanitised through `woocommerce_sanitize_additional_field`.
+- Stored at `_wc_other/econur/reference`. A classic-checkout fallback writes
+  `_econur_reference` and is registered **only** when the checkout page has no checkout
+  block, so the field can never render twice. `Econur_CRM_Reference_Field::get( $order )`
+  reads whichever key is populated.
+- Surfaced on the admin order screen and in the **admin** order email (not the customer's).
+- _(includes/class-reference-field.php; theme styles the step heading in woocommerce.css)_
+
+Not yet done: a Reference column in the CRM Customers table. Say the word if that's wanted.
+
+### 13.5 Product story content bulk-load
+
+`sample-data/econur-product-story.csv` fills all six `_econur_*` fields plus the long-form
+`Description` (which was empty on all five products) for p1–p5. Import with **"Update
+existing products"** ticked. Format guide in `sample-data/README.md`.
+
+Source contradictions flagged to the client, still open: Olivelle's "not for" list names its
+own target users; Licorice credits calendula and Herbifresh credits jujube, neither of which
+appears in their ingredient lists. Content was written around all three.

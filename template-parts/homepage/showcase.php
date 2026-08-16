@@ -114,7 +114,7 @@ $econ_lcp_done = false; // First image gets fetchpriority high (LCP candidate).
 									<?php if ( ! empty( $c['cat_names'] ) ) : ?>
 										<span class="econ-eyebrow"><?php echo esc_html( $c['cat_names'][0] ); ?></span>
 									<?php endif; ?>
-									<h2 class="econ-showcase__title"><?php echo esc_html( $c['name'] ); ?></h2>
+									<h2 class="econ-showcase__title"><?php echo econur_notranslate( $c['name'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper. ?></h2>
 									<?php if ( $c['positioning'] ) : ?>
 										<p class="econ-showcase__lead"><?php echo esc_html( $c['positioning'] ); ?></p>
 									<?php endif; ?>

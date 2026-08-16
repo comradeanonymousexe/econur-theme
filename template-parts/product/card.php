@@ -50,7 +50,7 @@ $econ_skin      = ! empty( $c['best_for'] ) ? array_slice( $c['best_for'], 0, 2 
 			<span class="econ-card__cat"><?php echo esc_html( $c['cat_names'][0] ); ?></span>
 		<?php endif; ?>
 
-		<h3 class="econ-card__title"><a href="<?php echo esc_url( $c['permalink'] ); ?>"><?php echo esc_html( $c['name'] ); ?></a></h3>
+		<h3 class="econ-card__title"><a href="<?php echo esc_url( $c['permalink'] ); ?>"><?php echo econur_notranslate( $c['name'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper. ?></a></h3>
 
 		<?php if ( $c['positioning'] ) : ?>
 			<p class="econ-card__desc"><?php echo esc_html( $c['positioning'] ); ?></p>

@@ -35,7 +35,7 @@ while ( have_posts() ) :
 		<section class="econ-lab-hero">
 			<div class="econ-container econ-lab-hero__inner">
 				<span class="econ-lab-badge"><?php econur_icon( 'shield', 'econ-icon' ); ?><?php esc_html_e( 'Lab Verified', 'econur' ); ?></span>
-				<h1 class="econ-lab-hero__title"><?php esc_html_e( 'BUET & BCSIR Certified: Our Lab-Verified Promise', 'econur' ); ?></h1>
+				<h1 class="econ-lab-hero__title"><?php echo econur_notranslate_terms( esc_html__( 'BUET & BCSIR Certified: Our Lab-Verified Promise', 'econur' ), econur_untranslatable_terms() ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped before term wrapping. */ ?></h1>
 				<p class="econ-lab-hero__lead"><?php esc_html_e( 'We would rather show you the numbers than ask you to trust us. Every Econur bar is independently tested — with Total Fatty Matter measured at 75%–86% and nil free alkali. Pure, gentle, and exactly what the label says.', 'econur' ); ?></p>
 			</div>
 		</section>
@@ -54,7 +54,7 @@ while ( have_posts() ) :
 		<section class="econ-container econ-lab-section">
 			<div class="econ-lab-explainers">
 				<div class="econ-lab-explainer">
-					<h2 class="econ-lab-explainer__title"><?php esc_html_e( 'Unmatched nourishment (75%–86% TFM)', 'econur' ); ?></h2>
+					<h2 class="econ-lab-explainer__title"><?php echo econur_notranslate_terms( esc_html__( 'Unmatched nourishment (75%–86% TFM)', 'econur' ), econur_untranslatable_terms() ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped before term wrapping. */ ?></h2>
 					<p><?php esc_html_e( 'The industry standard for a quality soap is a minimum of 75% Total Fatty Matter. Econur reaches up to 86% — a creamy, decadent lather that cleanses thoroughly without stripping your skin of its natural moisture.', 'econur' ); ?></p>
 				</div>
 				<div class="econ-lab-explainer">
@@ -71,13 +71,13 @@ while ( have_posts() ) :
 					<thead>
 						<tr>
 							<th><?php esc_html_e( 'Feature', 'econur' ); ?></th>
-							<th><?php esc_html_e( 'Econur cold-process bars', 'econur' ); ?></th>
+							<th><?php echo econur_notranslate_terms( esc_html__( 'Econur cold-process bars', 'econur' ), econur_untranslatable_terms() ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped before term wrapping. */ ?></th>
 							<th><?php esc_html_e( 'Mass-produced beauty bars', 'econur' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<th scope="row"><?php esc_html_e( 'TFM content', 'econur' ); ?></th>
+							<th scope="row"><?php echo econur_notranslate_terms( esc_html__( 'TFM content', 'econur' ), econur_untranslatable_terms() ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped before term wrapping. */ ?></th>
 							<td class="is-good"><?php esc_html_e( 'High (75%–86%)', 'econur' ); ?></td>
 							<td><?php esc_html_e( 'Low / often not disclosed', 'econur' ); ?></td>
 						</tr>
@@ -103,7 +103,7 @@ while ( have_posts() ) :
 
 		<section class="econ-lab-diff">
 			<div class="econ-container econ-lab-diff__inner">
-				<h2 class="econ-lab-diff__title"><?php esc_html_e( 'The Econur difference', 'econur' ); ?></h2>
+				<h2 class="econ-lab-diff__title"><?php echo econur_notranslate_terms( esc_html__( 'The Econur difference', 'econur' ), econur_untranslatable_terms() ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped before term wrapping. */ ?></h2>
 				<p><?php esc_html_e( 'High TFM, nil free alkali, retained glycerin — three lab-verified reasons Econur feels different on your skin. Not a marketing claim, but a measurable one.', 'econur' ); ?></p>
 			</div>
 		</section>
@@ -116,7 +116,7 @@ while ( have_posts() ) :
 						<a class="econ-lab-download" href="<?php echo esc_url( $econ_bcsir ); ?>" target="_blank" rel="noopener noreferrer">
 							<span class="econ-lab-download__icon"><?php econur_icon( 'download', 'econ-icon' ); ?></span>
 							<span class="econ-lab-download__text">
-								<span class="econ-lab-download__title"><?php esc_html_e( 'BCSIR Lab Report', 'econur' ); ?></span>
+								<span class="econ-lab-download__title"><?php echo econur_notranslate_terms( esc_html__( 'BCSIR Lab Report', 'econur' ), econur_untranslatable_terms() ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped before term wrapping. */ ?></span>
 								<span class="econ-lab-download__meta"><?php esc_html_e( 'PDF document', 'econur' ); ?></span>
 							</span>
 						</a>
@@ -125,7 +125,7 @@ while ( have_posts() ) :
 						<a class="econ-lab-download" href="<?php echo esc_url( $econ_buet ); ?>" target="_blank" rel="noopener noreferrer">
 							<span class="econ-lab-download__icon"><?php econur_icon( 'download', 'econ-icon' ); ?></span>
 							<span class="econ-lab-download__text">
-								<span class="econ-lab-download__title"><?php esc_html_e( 'BUET Lab Certificate', 'econur' ); ?></span>
+								<span class="econ-lab-download__title"><?php echo econur_notranslate_terms( esc_html__( 'BUET Lab Certificate', 'econur' ), econur_untranslatable_terms() ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped before term wrapping. */ ?></span>
 								<span class="econ-lab-download__meta"><?php esc_html_e( 'Image / certificate', 'econur' ); ?></span>
 							</span>
 						</a>

@@ -72,7 +72,12 @@ $econ_init_var_id = $econ_init_var ? $econ_init_var['id'] : 0;
 				<span class="econ-eyebrow"><?php echo esc_html( $econ_data['cat_names'][0] ); ?></span>
 			<?php endif; ?>
 
-			<h1 class="econ-product-hero__title"><?php the_title(); ?></h1>
+			<h1 class="econ-product-hero__title">
+				<?php
+				// Bar names stay English for GTranslate — see econur_notranslate().
+				echo econur_notranslate( get_the_title() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper.
+				?>
+			</h1>
 
 			<?php if ( ! empty( $econ_data['positioning'] ) ) : ?>
 				<p class="econ-product-hero__lead"><?php echo esc_html( $econ_data['positioning'] ); ?></p>

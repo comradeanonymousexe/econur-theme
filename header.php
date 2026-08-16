@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				printf(
 					'<a class="econ-logo" href="%s" rel="home">%s</a>',
 					esc_url( home_url( '/' ) ),
-					esc_html( get_bloginfo( 'name' ) )
+					econur_notranslate( get_bloginfo( 'name' ) ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper.
 				);
 			}
 			?>

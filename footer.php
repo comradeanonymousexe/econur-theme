@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			if ( has_custom_logo() ) {
 				the_custom_logo();
 			} else {
-				printf( '<span class="econ-logo econ-logo--light">%s</span>', esc_html( get_bloginfo( 'name' ) ) );
+				printf( '<span class="econ-logo econ-logo--light">%s</span>', econur_notranslate( get_bloginfo( 'name' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper.
 			}
 			?>
 			<p class="econ-footer__tagline">
@@ -63,7 +63,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="econ-container econ-footer__bar-inner">
 			<p>
 				&copy; <?php echo esc_html( wp_date( 'Y' ) ); ?>
-				<?php echo esc_html( get_bloginfo( 'name' ) ); ?>. <?php esc_html_e( 'All rights reserved.', 'econur' ); ?>
+				<?php echo econur_notranslate( get_bloginfo( 'name' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper. ?>. <?php esc_html_e( 'All rights reserved.', 'econur' ); ?>
 			</p>
 			<p>
 				<?php esc_html_e( 'Powered by', 'econur' ); ?>

@@ -326,3 +326,20 @@
 @media (min-width: 720px) {
   .econ-details__row { grid-template-columns: 200px 1fr; gap: var(--space-4); align-items: baseline; }
 }
+
+/* ---- Block checkout: "Additional information" (Reference field) ----
+ * The reference field is registered by the Econur CRM plugin via the
+ * Additional Checkout Fields API, so WooCommerce renders it in its own
+ * "Additional information" step. These rules only bring that step's heading
+ * into the brand type scale — the input itself keeps Woo's base styling so it
+ * stays consistent with the address fields above it. */
+.wc-block-checkout__additional-information-fields .wc-block-components-checkout-step__title,
+.wc-block-checkout__additional_fields .wc-block-components-checkout-step__title {
+  font-family: var(--font-display);
+  color: var(--text-dark);
+}
+
+.wc-block-checkout__additional-information-fields .wc-block-components-checkout-step__description,
+.wc-block-checkout__additional_fields .wc-block-components-checkout-step__description {
+  color: var(--text-mid);
+}
