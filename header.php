@@ -76,7 +76,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 			 * "flag + language name" control into a 44px icon button.
 			 */
 			if ( shortcode_exists( 'gtranslate' ) ) {
-				echo '<div class="econ-lang">' . do_shortcode( '[gtranslate]' ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- shortcode output is plugin-generated markup.
+				/*
+				 * The globe is what the visitor sees; GTranslate's own <select> is laid
+				 * transparently on top of it (see .econ-lang in components.css). The
+				 * select already carries its own aria-label — the "Select language
+				 * label" value from the plugin's settings — so it needs nothing here.
+				 */
+				echo '<div class="econ-lang">';
+				econur_icon( 'globe', 'econ-lang__icon' );
+				echo do_shortcode( '[gtranslate]' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- plugin-generated markup.
+				echo '</div>';
 			}
 			?>
 			<?php
