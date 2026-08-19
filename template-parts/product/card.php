@@ -21,8 +21,10 @@ if ( ! $c ) {
 $econ_init_var    = ! empty( $c['variations'] ) ? $c['variations'][0] : null;
 $econ_init_var_id = $econ_init_var ? $econ_init_var['id'] : 0;
 
-// "hero ingredients + target skin type" blurb line.
-$econ_hero_ings = array_slice( $c['ingredients'], 0, 3 );
+// "hero ingredients + target skin type" blurb line. Hero ingredients come from
+// the product's Ingredients attribute — see econur_hero_ingredients() for why
+// slicing the full _econur_ingredients list gave every bar the same base oils.
+$econ_hero_ings = ! empty( $c['hero_ingredients'] ) ? $c['hero_ingredients'] : array();
 $econ_skin      = ! empty( $c['best_for'] ) ? array_slice( $c['best_for'], 0, 2 ) : array_slice( $c['concern_names'], 0, 2 );
 ?>
 <article class="econ-card" data-econ-card

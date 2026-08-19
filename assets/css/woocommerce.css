@@ -279,6 +279,34 @@
 .econ-offers__name { font-weight: var(--fw-semibold); color: var(--text-dark); }
 .econ-offers__price { color: var(--text-mid); font-size: var(--fs-sm); }
 
+/* An offer now carries its real coupon code — the whole point of tying offers to
+ * coupons is that the customer can act on it without hunting for the code. */
+.econ-offers__card { display: grid; gap: var(--space-2); }
+.econ-offers__code {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--text-mid);
+}
+.econ-offers__code code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  color: var(--forest);
+  background: var(--pale);
+  border: 1px dashed var(--sage);
+  border-radius: 8px;
+  padding: 4px 10px;
+  user-select: all; /* one tap/click selects the whole code */
+}
+.econ-offers__expiry { color: var(--text-light); }
+
+/* The dashboard "Picked for you" card reuses the same offer body. */
+.econ-account-reco .econ-offers__card { max-width: 420px; }
+
 /* ---- Recent orders ---- */
 .econ-orders { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
 .econ-orders__item {

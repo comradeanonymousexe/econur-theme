@@ -172,6 +172,59 @@ function econur_ajax_cart_count() {
 }
 
 /**
+ * The two or three ingredients that actually distinguish a bar.
+ *
+ * Sourced from the product's **"Ingredients" attribute**, which staff curate per
+ * product (e.g. "Neem, Activated Charcoal, Tea Tree EO").
+ *
+ * It deliberately does NOT slice `_econur_ingredients`. That meta field is the
+ * full INCI-style declaration behind the "What's inside" section, and it opens
+ * with the soap base — olive / coconut / castor oil and tallow — which every bar
+ * shares. Taking its first three produced the same meaningless line on every
+ * card ("With Olive Oil, Coconut Oil, Castor Oil").
+ *
+ * Falls back to the full list only when no attribute is set, so a product that
+ * has not been given hero ingredients still shows something rather than nothing.
+ *
+ * @param WC_Product $product Product object.
+ * @param int        $limit   Maximum ingredients to return.
+ * @return string[]
+ */
+function econur_hero_ingredients( $product, $limit = 3 ) {
+	$names = array();
+
+	foreach ( (array) $product->get_attributes() as $attribute ) {
+		if ( ! $attribute instanceof WC_Product_Attribute ) {
+			continue;
+		}
+
+		// Matches a custom "Ingredients" attribute or a global `pa_ingredients`.
+		$key = sanitize_title( $attribute->get_name() );
+		if ( 'ingredients' !== $key && 'pa_ingredients' !== $key ) {
+			continue;
+		}
+
+		if ( $attribute->is_taxonomy() ) {
+			$terms = wc_get_product_terms( $product->get_id(), $attribute->get_name(), array( 'fields' => 'names' ) );
+			$names = is_wp_error( $terms ) ? array() : (array) $terms;
+		} else {
+			$names = array_map( 'trim', (array) $attribute->get_options() );
+		}
+		break;
+	}
+
+	$names = array_values( array_filter( $names, static function ( $n ) {
+		return '' !== trim( (string) $n );
+	} ) );
+
+	if ( empty( $names ) ) {
+		$names = econur_lines( econur_product_meta( $product->get_id(), 'ingredients' ) );
+	}
+
+	return array_slice( $names, 0, max( 1, (int) $limit ) );
+}
+
+/**
  * Assemble a product's presentation data once, for reuse across the homepage
  * showcase carousel, grid cards, and related products (keeps templates declarative).
  *
@@ -204,6 +257,7 @@ function econur_product_card_data( $product ) {
 	$benefits    = econur_lines( econur_product_meta( $id, 'benefits' ) );
 	$ingredients = econur_lines( econur_product_meta( $id, 'ingredients' ) );
 	$best_for    = econur_lines( econur_product_meta( $id, 'best_for' ) );
+	$hero_ings   = econur_hero_ingredients( $product, 3 );
 
 	// Available size/weight variations (in stock only).
 	$variations = array();
@@ -236,6 +290,7 @@ function econur_product_card_data( $product ) {
 		'positioning'   => econur_product_meta( $id, 'positioning' ),
 		'benefits'    => $benefits,
 		'ingredients' => $ingredients,
+		'hero_ingredients' => $hero_ings,
 		'best_for'    => $best_for,
 		'is_variable' => $product->is_type( 'variable' ),
 		'variations'  => $variations,

@@ -471,3 +471,69 @@ Consequences while it stays empty:
 
 Fix is a re-import with a `tax:skin_concern` column (or bulk-assigning the terms in the
 product admin). Not actioned — flagging for a decision.
+
+---
+
+## 15. Offers unified onto coupons (2026-08-19)
+
+### 15.1 The gap that was closed
+
+The old value ladder kept targeting rules in a free-text option
+(`econur_offer_rules`: `category | days | product_id | badge`) while the actual
+discount lived in an unrelated WooCommerce coupon. **Nothing connected them.** A
+rule's `badge` was display text only — it could advertise "10% off" while the coupon
+said 20%, or while no coupon existed at all. Creating one offer meant editing three
+places and keeping them in sync by hand.
+
+### 15.2 A coupon IS an offer
+
+`includes/class-offers.php` replaces `class-value-ladder.php` (deleted).
+
+Targeting now lives on the coupon itself, in a new **"Econur offer"** tab on the
+coupon data panel (`woocommerce_coupon_data_tabs` / `_data_panels` / `_options_save`):
+
+| Field | Meta | Purpose |
+|---|---|---|
+| Show as an offer | `_econur_offer_enabled` | Opt this coupon into My Account |
+| Has bought from | `_econur_offer_category` | `product_cat` slug, or `any` |
+| Days since last order | `_econur_offer_min_days` | Recency gate |
+| Feature product ID | `_econur_offer_product` | Optional bar to show alongside |
+| Badge text | `_econur_offer_badge` | Optional; **auto-generated from the discount when blank** |
+
+Leaving the badge blank is the recommended path — it derives "20% off" / "৳100 off"
+from the coupon amount, so it cannot contradict what the customer is actually charged.
+
+The customer-facing card now shows the **real coupon code**, its expiry, and (when
+set) the featured product. Offers that have expired or hit their usage limit are
+filtered out rather than advertised as dead codes.
+
+**Econur CRM → Offers** is now a read-only overview: what is running, who sees it,
+after how long, expiry, usage. Editing happens on the coupon. This is deliberate —
+duplicating the discount fields is exactly what allowed them to drift apart. Any
+saved legacy rules are surfaced once in a warning notice so nothing is lost silently.
+
+### 15.3 Discounts are members-only
+
+`Econur_CRM_Offers::restrict_to_members()` on `woocommerce_coupon_is_valid`. Guests
+attempting any coupon get:
+
+> Discount codes are for account holders. Create a free account or sign in, then
+> apply your code…
+
+The message is delivered by **throwing** from the filter rather than returning false:
+`WC_Discounts::is_coupon_valid()` wraps its validation chain in try/catch and surfaces
+the exception text, whereas returning false yields WooCommerce's generic "Coupon is
+not valid." with no next step for the customer.
+
+Escape hatch: `econur_coupon_members_only` (filter, receives the coupon) — return
+false to leave a specific coupon open to guests.
+
+This also makes the offers surface coherent: offers appear in My Account, and My
+Account is where the code can actually be used.
+
+### 15.4 Known consequence
+
+Guest COD buyers — likely most orders — cannot use codes at all. That is the client's
+explicit rule and the intended incentive to register, but it does mean any coupon
+promoted off-site (Facebook, a flyer) will fail for a first-time guest until they sign
+up. Worth wording external promos as "sign in to use" rather than just the bare code.
