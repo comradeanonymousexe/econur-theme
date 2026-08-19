@@ -371,3 +371,85 @@
 .wc-block-checkout__additional_fields .wc-block-components-checkout-step__description {
   color: var(--text-mid);
 }
+
+/* ---- Referral & points panel ------------------------------------------- */
+.econ-refer {
+  background: linear-gradient(150deg, var(--pale), var(--white));
+  border: 1px solid var(--sage);
+  border-radius: var(--radius-card);
+  padding: var(--space-5);
+}
+.econ-refer__grid { display: grid; gap: var(--space-4); align-items: start; }
+.econ-refer__lead { color: var(--text-mid); margin: 0 0 var(--space-3); max-width: 48ch; }
+
+/* The code is the hero of this panel — big, monospaced, one-tap selectable. */
+.econ-refer__code { margin: 0 0 6px; }
+.econ-refer__code code {
+  display: inline-block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: clamp(1.25rem, 5vw, 1.75rem);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.16em;
+  color: var(--forest);
+  background: var(--white);
+  border: 2px dashed var(--emerald);
+  border-radius: var(--radius-card);
+  padding: 10px 18px;
+  user-select: all;
+}
+.econ-refer__hint { font-size: var(--fs-sm); color: var(--text-light); margin: 0; }
+
+.econ-refer__stats { display: flex; gap: var(--space-4); }
+.econ-refer__stat {
+  flex: 1 1 0;
+  background: var(--white);
+  border: 1px solid var(--sage);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+  text-align: center;
+}
+.econ-refer__stat-value { display: block; font-size: 1.9rem; font-weight: var(--fw-bold); color: var(--forest); line-height: 1.1; }
+.econ-refer__stat-label { display: block; font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-light); margin-top: 4px; }
+
+.econ-refer__subhead { font-size: var(--fs-h3); margin: var(--space-5) 0 var(--space-3); }
+
+.econ-refer__stat-sub { display: block; font-size: var(--fs-sm); color: var(--text-mid); margin-top: 2px; }
+
+.econ-refer__redeem {
+  background: var(--white);
+  border: 1px solid var(--sage);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+}
+.econ-refer__redeem-lead { margin: 0 0 var(--space-3); color: var(--text-mid); }
+.econ-refer__redeem-form { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin: 0 0 8px; }
+.econ-refer__redeem-input {
+  flex: 0 1 140px;
+  min-height: 48px;
+  border: 1.5px solid var(--sage);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 1.1rem;
+  font-weight: var(--fw-bold);
+  color: var(--forest);
+  background: var(--white);
+}
+.econ-refer__redeem-input:focus { outline: none; border-color: var(--emerald); box-shadow: 0 0 0 3px var(--pale); }
+
+.econ-refer__history { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.econ-refer__history li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--pale);
+  font-size: var(--fs-sm);
+}
+.econ-refer__history li:last-child { border-bottom: 0; }
+.econ-refer__history-note { color: var(--text-mid); }
+.econ-refer__history-delta { font-weight: var(--fw-bold); color: var(--forest); }
+
+@media (min-width: 720px) {
+  .econ-refer__grid { grid-template-columns: 1.4fr 1fr; gap: var(--space-6); }
+}

@@ -537,3 +537,165 @@ Guest COD buyers — likely most orders — cannot use codes at all. That is the
 explicit rule and the intended incentive to register, but it does mean any coupon
 promoted off-site (Facebook, a flyer) will fail for a first-time guest until they sign
 up. Worth wording external promos as "sign in to use" rather than just the bare code.
+
+---
+
+## 16. Referrals, points, and the trimmed account (2026-08-20)
+
+### 16.1 The core decision: a referral code IS a coupon
+
+Each customer's referral code is a real WooCommerce coupon they own
+(`_econur_referral_owner` = user ID; the code is cached on the user as
+`econur_referral_code`).
+
+The alternative — a bespoke "referral code" field at checkout — would mean writing
+our own validation, discount maths and totals handling, **twice**, because the block
+checkout and the classic checkout take different routes. As a coupon:
+
+- the customer types it into a discount box they already recognise;
+- WooCommerce owns validation, per-user limits, totals and reporting;
+- it appears in the Offers overview like any other code;
+- it **inherits the members-only rule from §15.3 for free** — a referred buyer must
+  create an account to claim the 5%, and that account is what makes them reachable.
+
+Codes are generated lazily (first time the panel is viewed), formatted as four
+letters of the customer's name + four random characters from an alphabet with no
+`O/0` or `I/1` — these get read aloud and typed on phones.
+
+### 16.2 The loop
+
+| Step | Mechanism |
+|---|---|
+| Friend enters code at checkout | Standard coupon box → **5% off** (`econur_referral_discount_percent`) |
+| Order reaches processing/completed | Owner earns **15% of the order value** as points (`econur_referral_reward_percent`) |
+| Order later cancelled/refunded/failed | Award reversed with a compensating ledger row |
+
+Guards: you cannot use your own code; the code is **first-order only**
+(`wc_get_customer_order_count`); awards are idempotent per order, so a status
+bouncing between processing and completed never pays twice.
+
+### 16.2b Reward scales with the order — and a point is a taka
+
+A flat reward would pay the same for a ৳280 order as a ৳2,800 one, so the referrer
+earns a **percentage** instead. The base is the item subtotal **minus discounts,
+excluding shipping and tax**: the shop should not pay commission on delivery it
+merely collects, and paying on the pre-discount figure would mean rewarding the 5%
+the referral itself gave away. Floored, so rounding never goes against the shop.
+
+**One point = ৳1** (`econur_point_value`). No conversion table, no arithmetic: a
+balance of 342 reads as ৳342 off. It also keeps the referral percentage legible —
+15% of a ৳520 order is 78 points, which is ৳78.
+
+Redemption is therefore an amount, not a tier: the customer chooses how many points
+to turn into a code, above a **50-point floor** (`econur_points_min_redemption`)
+that exists to stop the coupons table filling with ৳3 records.
+
+Reversal returns **exactly what the ledger recorded**, never a recomputed percentage
+— an order's total can change after a partial refund, and recalculating at reversal
+time would claw back the wrong amount.
+
+### 16.3 Points are a ledger, not a number
+
+`{$prefix}econur_points` (DB version → **1.2.0**): `user_id`, `delta`, `reason`,
+`order_id`, `related_user_id`, `note`, `created_at`.
+
+A balance is always `SUM(delta)` — never stored. That removes the class of bug where
+a cached total drifts from its history and nobody can say which is right, and it
+makes "I had 45 points" answerable. At this shop's scale the sum is free.
+
+### 16.4 Redemption produces a coupon
+
+Redeeming debits the ledger and mints a **single-use, email-restricted coupon** worth
+`points × ৳1`, expiring in 90 days. The coupon is created *before* the debit, so a
+failure never costs points.
+
+This deliberately avoids a bespoke "pay with points" flow at checkout: the block
+checkout would need custom React, and the customer already understands codes.
+
+### 16.5 My Account is two tabs
+
+`woocommerce_account_menu_items` reduces the menu to **Dashboard**, **Profile** and
+**Log out**. Downloads (nothing is downloadable), Payment methods (COD stores no
+cards), Addresses and Account details (folded into Profile) and Orders (the dashboard
+lists them with reorder) are removed.
+
+Only the MENU is filtered — **the endpoints stay registered**, so existing links,
+WooCommerce emails and "view order" URLs keep resolving instead of 404ing. Profile
+links across to the address editor.
+
+Dashboard order: greeting → offers → **referral panel** → nudges → recent orders →
+details. The referral panel sits high because it is the only section that asks the
+customer to do something.
+
+### 16.6 Replaces the "Reference" field
+
+`class-reference-field.php` is **deleted**. The free-text "Who told you about us?"
+answered the same question without being actionable — it could not discount, could
+not reward, and needed manual reading. The referral code answers it and pays both
+sides. Historical `_wc_other/econur/reference` values remain on past orders.
+
+### 16.7 Open / worth watching
+
+- **Guests cannot use referral codes** (members-only, §15.3). Intended — it is the
+  registration incentive — but any code shared off-site fails until the friend signs
+  up. Word promos as "sign in and use code X".
+- **Points have no expiry.** Deliberate for launch; add one only if liability grows.
+- **Redemption coupons are `fixed_cart`** — points buy money off any basket rather
+  than a specific bar. Tighten with product restrictions on the coupon if needed.
+- **Combined cost of a referral is ~20% of the first order** (5% to the friend + 15%
+  in points to the referrer, and a point is a taka). That is deliberate customer
+  acquisition spend, but it is real margin — worth watching once volume builds, and
+  both numbers are single-filter changes.
+
+---
+
+## 17. Security fixes (2026-08-20)
+
+Findings verified against the live site, then closed.
+
+### 17.1 Referral points required money in hand (was: mintable before payment)
+
+Awarding fired on `processing` **or** `completed`. Under COD `processing` means the
+order was PLACED, not paid — so a referrer could earn points, redeem them into a
+coupon, and have the referred order refused at the door. Now **`completed` only**.
+
+### 17.2 Negative balances now recover their own value
+
+Awarding on `completed` narrows the window but does not close it: a genuine
+post-delivery refund can still land after the referrer redeemed. Debiting alone left
+a negative balance AND a live coupon — the shop paying twice.
+
+`Econur_CRM_Points::recover_from_rewards()` now expires that customer's **unspent**
+reward coupons, oldest first, crediting the points back for each, until the deficit
+is covered. Already-redeemed coupons are left alone (that value is spent; cancelling
+a discount on a completed order would be worse). Any remainder stays as a visible
+debt rather than being silently zeroed.
+
+Voided coupons are **expired, not deleted** — WooCommerce refuses them at checkout
+and the record survives for anyone auditing the account.
+
+### 17.3 Reward coupons are owned by USER ID, not email
+
+Originally email-restricted via `set_email_restrictions()`. That silently broke for
+phone-first accounts, which hold a synthesised `01…@placeholder` address: the
+restriction could never match the real address typed at checkout, so those customers
+could never spend their own points — and they are the majority here.
+
+Replaced with `_econur_points_user` enforced in `woocommerce_coupon_is_valid`. Exact,
+works regardless of email, and survives a customer changing their address.
+
+### 17.4 Hardening (inc/security.php)
+
+REST user enumeration closed (`/wp/v2/users` unset below `list_users`), `?author=N`
+redirected, XML-RPC disabled, `X-Powered-By` and generator tags removed, and the
+baseline headers added: `X-Content-Type-Options`, `X-Frame-Options`,
+`Referrer-Policy`, `Permissions-Policy`, plus HSTS **only over HTTPS** and without
+`preload`/`includeSubDomains` (both are owner decisions, not theme defaults).
+
+### 17.5 STILL OPEN — server-side, cannot be done from PHP
+
+1. **Force HTTPS.** `http://eco-nur.com/` still answers 200 with no redirect, so
+   passwords and delivery addresses can travel in clear text. This is the single
+   largest remaining risk. Rewrite rule + both URLs in Settings → General.
+2. **`wp-content/uploads/` is browsable.** Needs `Options -Indexes`.
+3. **`/readme.html`** discloses the WP version and returns after every core update.

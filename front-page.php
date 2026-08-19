@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
+get_template_part( 'template-parts/homepage/greeting' );      // h1 (greeting / brand line)
 get_template_part( 'template-parts/homepage/showcase' );      // 1
 get_template_part( 'template-parts/homepage/product-grid' );  // 2
 get_template_part( 'template-parts/homepage/reviews' );       // 3

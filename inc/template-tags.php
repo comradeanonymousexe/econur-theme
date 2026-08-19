@@ -131,6 +131,34 @@ function econur_untranslatable_terms() {
 }
 
 /**
+ * A greeting that matches the customer's time of day.
+ *
+ * Uses the site's timezone via current_time() rather than the server's, so a
+ * host in another region does not wish a Dhaka customer good morning at night.
+ *
+ * @return string
+ */
+function econur_time_greeting() {
+	$hour = (int) current_time( 'G' );
+
+	if ( $hour < 12 ) {
+		$greeting = __( 'Good morning', 'econur' );
+	} elseif ( $hour < 17 ) {
+		$greeting = __( 'Good afternoon', 'econur' );
+	} else {
+		$greeting = __( 'Good evening', 'econur' );
+	}
+
+	/**
+	 * Filter the time-of-day greeting.
+	 *
+	 * @param string $greeting Greeting text.
+	 * @param int    $hour     Hour of day, 0-23, in site time.
+	 */
+	return apply_filters( 'econur_time_greeting', $greeting, $hour );
+}
+
+/**
  * Primary menu fallback when no menu is assigned in Appearance → Menus.
  * Keeps the header usable out-of-the-box.
  */

@@ -89,3 +89,58 @@ function econur_account_dashboard_extras() {
 	// The CRM plugin renders a personalised recommendation here (Phase 8, spec §6).
 	do_action( 'econur_account_recommendation', $user_id );
 }
+
+/* -------------------------------------------------------------------------
+ * My Account: two tabs only
+ * ---------------------------------------------------------------------- */
+
+add_filter( 'woocommerce_account_menu_items', 'econur_account_menu_items', 20 );
+/**
+ * Reduce My Account to Dashboard, Profile and Log out.
+ *
+ * WooCommerce ships six tabs. For a cash-on-delivery soap shop, four of them are
+ * dead weight: Downloads (nothing is downloadable), Payment methods (COD stores
+ * no cards), Addresses and Account details (both folded into Profile), and Orders
+ * (the dashboard already lists them, with reorder).
+ *
+ * Only the MENU is trimmed — the endpoints stay registered, so existing links,
+ * WooCommerce emails and "view order" URLs keep resolving instead of 404ing.
+ *
+ * @param array $items Menu items.
+ * @return array
+ */
+function econur_account_menu_items( $items ) {
+	$keep = array(
+		'dashboard'    => __( 'Dashboard', 'econur' ),
+		'edit-account' => __( 'Profile', 'econur' ),
+		'customer-logout' => isset( $items['customer-logout'] ) ? $items['customer-logout'] : __( 'Log out', 'econur' ),
+	);
+
+	// Preserve any third-party tab rather than silently deleting someone's feature.
+	$core = array( 'dashboard', 'orders', 'downloads', 'edit-address', 'payment-methods', 'edit-account', 'customer-logout' );
+	foreach ( $items as $key => $label ) {
+		if ( ! in_array( $key, $core, true ) ) {
+			$keep[ $key ] = $label;
+		}
+	}
+
+	// Log out belongs last.
+	$logout = $keep['customer-logout'];
+	unset( $keep['customer-logout'] );
+	$keep['customer-logout'] = $logout;
+
+	return $keep;
+}
+
+add_action( 'woocommerce_edit_account_form_start', 'econur_profile_address_intro' );
+/**
+ * Addresses no longer have their own tab, so point at them from Profile.
+ */
+function econur_profile_address_intro() {
+	printf(
+		'<p class="econ-account-nudge">%1$s <a href="%2$s">%3$s</a></p>',
+		esc_html__( 'Delivery address is saved with your orders.', 'econur' ),
+		esc_url( wc_get_endpoint_url( 'edit-address' ) ),
+		esc_html__( 'Edit addresses', 'econur' )
+	);
+}

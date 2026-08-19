@@ -161,3 +161,25 @@
 .econ-cta__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: center; }
 .econ-cta__ghost { color: var(--white); border-color: var(--sage); background: transparent; }
 .econ-cta__ghost:hover { background: var(--white); color: var(--forest); }
+
+/* -------------------------------------------------------------------------
+ * 0 · Homepage heading (the page's only h1)
+ *
+ * Sized to sit ABOVE the showcase without competing with the product name
+ * inside it — the carousel is still the hero, this is the page's label.
+ * ---------------------------------------------------------------------- */
+.econ-home-head { padding-block: clamp(20px, 5vw, 36px) 0; }
+.econ-home-head__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4.5vw, 2.25rem);
+  line-height: 1.15;
+  color: var(--text-dark);
+  margin: 0 0 6px;
+}
+.econ-home-head__title--greeting { color: var(--forest); }
+.econ-home-head__sub {
+  color: var(--text-mid);
+  margin: 0;
+  max-width: 56ch;
+  font-size: var(--fs-sm);
+}

@@ -29,6 +29,7 @@ function econur_require( $relative ) {
 	}
 }
 
+econur_require( 'inc/security.php' );
 econur_require( 'inc/setup.php' );
 econur_require( 'inc/template-tags.php' );
 econur_require( 'inc/content-helpers.php' );

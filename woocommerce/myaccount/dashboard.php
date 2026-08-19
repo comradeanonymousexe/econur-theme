@@ -58,6 +58,13 @@ $econ_placeholder_email = (bool) get_user_meta( $econ_user_id, 'econur_placehold
 	do_action( 'econur_account_offers', $econ_user_id );
 
 	/**
+	 * Referral code, points balance and redemption — filled by the CRM plugin.
+	 * Sits above orders because it is the thing we most want the customer to act
+	 * on, and it is the only section that asks something of them.
+	 */
+	do_action( 'econur_account_referrals', $econ_user_id );
+
+	/**
 	 * Nudges from inc/account.php, plus anything third-party plugins attach.
 	 */
 	do_action( 'woocommerce_account_dashboard' );
