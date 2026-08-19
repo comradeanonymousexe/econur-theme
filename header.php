@@ -34,12 +34,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="econ-header__brand">
 			<?php
 			if ( has_custom_logo() ) {
+				// A logo set in Appearance → Customize always wins.
 				the_custom_logo();
 			} else {
+				/*
+				 * Theme-bundled brand mark. Intrinsic size is declared so the header
+				 * reserves its space before the image decodes (guards CLS), and it is
+				 * eager + high priority because it sits above the fold.
+				 */
 				printf(
-					'<a class="econ-logo" href="%s" rel="home">%s</a>',
+					'<a class="econ-logo econ-logo--mark" href="%1$s" rel="home"><img src="%2$s" alt="%3$s" width="858" height="189" decoding="async" fetchpriority="high"></a>',
 					esc_url( home_url( '/' ) ),
-					econur_notranslate( get_bloginfo( 'name' ) ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside the helper.
+					esc_url( ECONUR_URI . '/assets/images/logo.png' ),
+					esc_attr( get_bloginfo( 'name' ) )
 				);
 			}
 			?>

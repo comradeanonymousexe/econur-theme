@@ -35,12 +35,10 @@ econur_require( 'inc/content-helpers.php' );
 econur_require( 'inc/enqueue.php' );
 econur_require( 'inc/taxonomies.php' );
 econur_require( 'inc/performance.php' );
-econur_require( 'inc/seed.php' );
 
 // WooCommerce-dependent wiring loads only when WooCommerce is active.
 if ( class_exists( 'WooCommerce' ) ) {
 	econur_require( 'inc/woocommerce.php' );
-	econur_require( 'inc/checkout.php' );
 	econur_require( 'inc/auth.php' );
 	econur_require( 'inc/account.php' );
 	econur_require( 'inc/profile.php' );

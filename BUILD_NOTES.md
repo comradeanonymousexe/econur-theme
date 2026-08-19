@@ -354,3 +354,120 @@ existing products"** ticked. Format guide in `sample-data/README.md`.
 Source contradictions flagged to the client, still open: Olivelle's "not for" list names its
 own target users; Licorice credits calendula and Herbifresh credits jujube, neither of which
 appears in their ingredient lists. Content was written around all three.
+
+---
+
+## 14. Round 3 — high-severity fixes (2026-08-15)
+
+### 14.1 Phone is now mandatory and validated (§13.1 partially closed)
+
+`Econur_CRM_Checkout_Phone` (plugin). The block checkout drives phone visibility from
+the `woocommerce_checkout_phone_field` option, so the plugin filters
+`pre_option_woocommerce_checkout_phone_field` → `'required'`. Format validation
+(`01[3-9]` + 8 digits) runs on `woocommerce_blocks_validate_location_address_fields`,
+with a classic-checkout path kept for the shortcode case.
+
+This is enforced in code, not settings, so it cannot drift. Remove the
+`pre_option_*` filter to hand control back to WooCommerce → Settings → Checkout.
+
+**`inc/checkout.php` was deleted** — every hook in it was classic-only and inert. The
+field trimming (last name / address 2 / postcode) and the COD trust notice went with
+it; both were already not running. Recoverable from git if the checkout is ever
+reverted to the shortcode.
+
+### 14.2 Reminders persist until a human closes them
+
+- Cron now sweeps `due_before` today instead of matching the exact date, so a day
+  WP-Cron misses no longer loses those reminders permanently.
+- New `notified_at` column (DB version → **1.1.0**, applied by `maybe_upgrade_db`).
+  `econur_reminder_due` fires **exactly once** per reminder; re-running the cron can no
+  longer double-fire a future auto-sender.
+- New **Open** bucket (pending + due ≤ today) is now the default worklist view and the
+  first dashboard card. A reminder stays there from the day it comes due until Mark
+  Sent / Dismiss — nothing ages out on its own.
+- Reminders table gained a **Created** column ("12 days ago") and the Due column now
+  states "overdue by N days", so crews can see what has been waiting.
+
+### 14.3 Special-date reminders are genuinely annual
+
+- Due date is now the special date **minus one day** (`econur_special_date_lead_days`
+  filter, default 1) so the nudge lands before the day itself.
+- New `econur_reminder_closed` action; closing a `special_date` reminder re-arms it for
+  next year (pending, stamps cleared). Previously it was marked sent and never returned
+  despite being documented as annual.
+- Editing a saved date re-opens the reminder instead of leaving it suppressed as sent.
+- Repurchase reminders are deliberately **not** re-armed — they belong to one past
+  purchase, and the next order generates its own.
+
+### 14.4 Other fixes
+
+- **No reminders without a phone.** The engine falls back to the shipping phone (where
+  the block checkout collects it) and skips the order entirely if neither exists —
+  previously it created rows with an empty `wa.me` link that no crew could action.
+- **Weight detection tightened.** Line-item meta is now only read from size-ish keys
+  (`econur_weight_meta_keys` filter) and the value must be *only* a number plus a gram
+  unit. The old loose scan could read any numeric meta ending in "g" as a weight and
+  silently pick the wrong offsets. The dashboard's "best-selling size" now reuses the
+  same detector, so the two can no longer disagree.
+- **Registration email fallback hardened.** `inc/auth.php` still substitutes
+  `$_POST['email']` — WooCommerce reads it directly with no usable filter (see the
+  expanded comment) — but now verifies the registration nonce *before* touching the
+  superglobal rather than merely checking the field exists.
+- **Dashboard charts removed** at the client's request, along with `dashboard.js`, the
+  chart README, the chart CSS and the now-unused `byProduct`/`byWeight` aggregation.
+
+### 14.5 Translation is GTranslate's job
+
+`load_theme_textdomain()` and the plugin's `Domain Path` header were removed: the theme
+pointed at a `languages/` directory that never existed and the plugin never called
+`load_plugin_textdomain()`, so neither did anything. GTranslate works on rendered output.
+
+The `__()` / `esc_html__()` calls are **deliberately kept** — they return English
+unchanged, which is exactly what GTranslate needs, and stripping ~500 of them would be
+pure churn and risk. See §13.x and the `notranslate` helpers in `inc/template-tags.php`
+for the terms held back from translation.
+
+### 14.6 Dead code removed
+
+`inc/checkout.php` (inert), `includes/class-phone-verification.php` (self-documented as
+removed), the empty `includes/admin/views/` and `languages/` directories, and the chart
+assets.
+
+`inc/seed.php` was **folded into `inc/cpt-testimonial.php`** rather than deleted outright:
+testimonial seeding still earns its place (a fresh install renders the reviews section
+empty without it) and now lives next to the post type it creates. Its **category seeding
+was dropped** — see §14.7.
+
+**Not addressed (client deferred):** the `get_available_variations()` per-card cost —
+fine below ~100 products.
+
+### 14.7 Stray seed categories are live on the site — ACTION NEEDED
+
+Confirmed on eco-nur.com: the homepage category filter currently renders **seven** chips —
+`baby`, `Baby Care`, `body`, `Daily Care`, `face`, `Face Care`, `Hair Care`.
+
+Only three are real. The products imported from the CSV use `face`, `body` and `baby`;
+the other four are leftovers created by the old `inc/seed.php` on theme activation. They
+are empty, they clutter the filter, and `baby` vs `Baby Care` reads as a duplicate.
+
+The seeder no longer creates them, but **deleting the four existing empty terms is a
+manual step**: Products → Categories → delete *Face Care*, *Baby Care*, *Hair Care*,
+*Daily Care*. Deleting an empty category is safe and cannot affect a product.
+
+Worth doing at the same time: the real terms are lowercase slugs shown verbatim in the
+filter (`face`, `body`, `baby`). Renaming them to *Face*, *Body* and *Baby* is a display
+change only and does not affect the product CSV.
+
+### 14.8 `skin_concern` is empty on every product — OPEN
+
+Also confirmed live: every product card renders `data-concerns=""`. The CSV assigned the
+concern names (*Acne & Oily*, *Brightening*, …) as WooCommerce **tags**, not to the
+theme's `skin_concern` taxonomy.
+
+Consequences while it stays empty:
+- The skin-concern filter on the homepage has nothing to filter by.
+- **Related products** match on shared `skin_concern`, so section 9 of every product page
+  has no basis to pick from.
+
+Fix is a re-import with a `tax:skin_concern` column (or bulk-assigning the terms in the
+product admin). Not actioned — flagging for a decision.

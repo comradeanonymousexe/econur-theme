@@ -144,6 +144,17 @@
   color: var(--text-dark);
   letter-spacing: 0.01em;
 }
+
+/* Image brand mark (assets/images/logo.png, 858×189 — a wide lockup, so it is
+ * capped by height and allowed to size itself horizontally). */
+.econ-logo--mark { display: inline-flex; line-height: 0; }
+.econ-logo--mark img { display: block; max-height: 32px; width: auto; }
+
+/* Below 480px the header is logo + two action buttons on a 375px viewport;
+ * 40px tall would render ~182px wide and crowd them. */
+@media (max-width: 479.98px) {
+  .econ-logo--mark img { max-height: 30px; }
+}
 .econ-header__actions { order: 2; display: flex; align-items: center; gap: var(--space-1); }
 
 .econ-icon-btn {
@@ -341,6 +352,54 @@
 .econ-carousel__dot.is-active { background: var(--forest); transform: scale(1.25); }
 .econ-carousel--single .econ-carousel__btn,
 .econ-carousel--single .econ-carousel__dots { display: none; }
+
+/* Mobile: move the arrows out of the slide and into a control row.
+ *
+ * The overlay position is `top: 42%` of the whole .econ-carousel. Above 880px the
+ * showcase is a two-column grid, so that lands over the image. Below it the grid
+ * stacks (image ~193px, then the info column), the carousel becomes ~670px tall,
+ * and 42% falls straight onto the product name — the arrows covered the bar name
+ * and, being z-index 2, swallowed taps meant for it.
+ *
+ * Rather than re-deriving a magic offset from the image aspect ratio (brittle, and
+ * it breaks again whenever the info column changes height), the arrows become a
+ * real control row beneath the carousel: [←] [• • •] [→]. Nothing can overlap the
+ * content, the 44px targets sit in comfortable thumb reach, and the dots keep
+ * their place in the middle.
+ *
+ * Breakpoint matches the showcase grid in homepage.css.
+ */
+@media (max-width: 879.98px) {
+  .econ-carousel {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "viewport viewport viewport"
+      "prev     dots     next";
+    align-items: center;
+  }
+
+  .econ-carousel__viewport { grid-area: viewport; }
+  .econ-carousel__btn--prev { grid-area: prev; }
+  .econ-carousel__btn--next { grid-area: next; }
+  .econ-carousel__dots { grid-area: dots; }
+
+  .econ-carousel__btn {
+    position: static;
+    inset: auto;
+    transform: none;
+    margin-top: var(--space-4);
+  }
+
+  /* Solid rather than glass: it now sits on the page background, not on an image. */
+  .econ-carousel__btn {
+    background: var(--white);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .econ-carousel__dots { margin-top: var(--space-4); }
+}
 
 /* Offer slide */
 .econ-offer { position: relative; min-height: 320px; display: flex; align-items: center; border-radius: var(--radius-card); overflow: hidden; background: linear-gradient(140deg, var(--forest), var(--emerald-dark)); color: var(--white); }

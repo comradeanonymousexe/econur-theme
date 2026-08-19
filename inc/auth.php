@@ -304,28 +304,48 @@ function econur_register_form_special_date() {
 /**
  * Make the mobile number carry the account when no email is given.
  *
- * WC_Form_Handler::process_registration reads $_POST['email'] into a local
- * variable at the very top of the request (wp_loaded, priority 20) and hard-fails
- * on an empty value, so there is no later filter that can supply one. We therefore
- * substitute the synthesised address just before that handler runs. Validation of
- * the phone itself happens in econur_validate_registration below, and a bad phone
- * means we substitute nothing and WooCommerce's own "email required" error stands.
+ * WHY THIS MUTATES $_POST — there is no alternative. WC_Form_Handler::process_registration
+ * gates on `isset( $_POST['register'], $_POST['email'] )` and reads the address straight
+ * into a local variable (WooCommerce includes/class-wc-form-handler.php, ~line 1186-1189).
+ * Every downstream hook runs too late: `woocommerce_process_registration_errors` receives
+ * the email by value and can only return errors, and `woocommerce_new_customer_data` sits
+ * inside wc_create_new_customer(), which already rejected the empty address. Supplying the
+ * value before the handler runs is therefore the only mechanism available.
+ *
+ * We verify WooCommerce's own registration nonce FIRST so a stray POST can never cause us
+ * to rewrite the superglobal — WooCommerce will verify it again, and a request that fails
+ * here is one we simply leave untouched.
+ *
+ * A bad or missing phone means we substitute nothing and WooCommerce's own "email is
+ * required" error stands. The phone itself is validated in econur_validate_registration().
  */
 add_action( 'wp_loaded', 'econur_registration_email_fallback', 19 );
 function econur_registration_email_fallback() {
-	// phpcs:disable WordPress.Security.NonceVerification.Missing -- WooCommerce verifies woocommerce-register-nonce in the handler that follows.
-	if ( empty( $_POST['register'] ) || ! isset( $_POST['woocommerce-register-nonce'] ) ) {
+	if ( is_admin() || empty( $_POST['register'] ) ) {
 		return;
 	}
+
+	// Verify before touching anything. WooCommerce re-verifies in its own handler.
+	$nonce = isset( $_POST['woocommerce-register-nonce'] )
+		? sanitize_text_field( wp_unslash( $_POST['woocommerce-register-nonce'] ) )
+		: '';
+	if ( '' === $nonce || ! wp_verify_nonce( $nonce, 'woocommerce-register' ) ) {
+		return;
+	}
+
+	// Only fill a genuinely absent address; never overwrite what the customer typed.
 	if ( ! empty( $_POST['email'] ) ) {
 		return;
 	}
-	$phone = econur_normalize_bd_phone( isset( $_POST['econur_reg_phone'] ) ? wp_unslash( $_POST['econur_reg_phone'] ) : '' );
+
+	$phone = econur_normalize_bd_phone(
+		isset( $_POST['econur_reg_phone'] ) ? sanitize_text_field( wp_unslash( $_POST['econur_reg_phone'] ) ) : ''
+	);
 	if ( '' === $phone ) {
 		return;
 	}
+
 	$_POST['email'] = econur_placeholder_email( $phone );
-	// phpcs:enable WordPress.Security.NonceVerification.Missing
 }
 
 /**

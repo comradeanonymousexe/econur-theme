@@ -113,3 +113,83 @@ function econur_save_testimonial_meta( $post_id ) {
 	$location = isset( $_POST['econur_location'] ) ? sanitize_text_field( wp_unslash( $_POST['econur_location'] ) ) : '';
 	update_post_meta( $post_id, '_econur_location', $location );
 }
+
+/* -------------------------------------------------------------------------
+ * One-time seeding
+ *
+ * Folded in from the old inc/seed.php, which also seeded four product
+ * categories — "Face Care", "Baby Care", "Hair Care", "Daily Care". Those never
+ * matched the real catalog (which uses face / body / baby from the product CSV),
+ * so they only ever added empty duplicates to the homepage filter. Category
+ * seeding is therefore dropped: WooCommerce's CSV import creates the real terms.
+ *
+ * Seeding testimonials still earns its place — a fresh install renders the
+ * reviews section empty otherwise — so it lives here, next to the post type it
+ * creates, rather than in a separate file.
+ * ---------------------------------------------------------------------- */
+
+add_action( 'after_switch_theme', 'econur_seed_testimonials' );
+/**
+ * Create the three brief testimonials (spec §4.1.3) on first activation.
+ *
+ * Guarded twice: it never runs if ANY testimonial already exists, so it cannot
+ * duplicate content or overwrite copy the client has edited.
+ *
+ * PLACEHOLDER: this copy comes from the brief and is not a verified customer
+ * review. Replace or delete before launch.
+ */
+function econur_seed_testimonials() {
+	if ( ! post_type_exists( 'econ_testimonial' ) ) {
+		return;
+	}
+
+	$existing = get_posts(
+		array(
+			'post_type'        => 'econ_testimonial',
+			'numberposts'      => 1,
+			'fields'           => 'ids',
+			'post_status'      => 'any',
+			'suppress_filters' => false,
+		)
+	);
+	if ( ! empty( $existing ) ) {
+		return;
+	}
+
+	$seed = array(
+		array(
+			'name'     => 'Nadia Rahman',
+			'location' => 'Dhaka',
+			'rating'   => 5,
+			'quote'    => 'Softest my skin has felt in years — this bar is a permanent fixture in my shower now. I won\'t go back to commercial soap.',
+		),
+		array(
+			'name'     => 'Tanvir Hossain',
+			'location' => 'Chittagong',
+			'rating'   => 5,
+			'quote'    => 'The Active Defense Bar cleared my nose congestion and blackheads in two weeks. Genuinely impressed.',
+		),
+		array(
+			'name'     => 'Priya Chowdhury',
+			'location' => 'Sylhet',
+			'rating'   => 5,
+			'quote'    => 'Ordered a full set as a gift — the eco packaging and the scents are beautiful. Everyone loved them.',
+		),
+	);
+
+	foreach ( $seed as $item ) {
+		$post_id = wp_insert_post(
+			array(
+				'post_type'    => 'econ_testimonial',
+				'post_status'  => 'publish',
+				'post_title'   => $item['name'],
+				'post_content' => $item['quote'],
+			)
+		);
+
+		if ( $post_id && ! is_wp_error( $post_id ) ) {
+			update_post_meta( $post_id, '_econur_rating', (int) $item['rating'] );
+			update_post_meta( $post_id, '_econur_location', $item['location'] );
+		}
+	}
+}

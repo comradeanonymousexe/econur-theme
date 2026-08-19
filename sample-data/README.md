@@ -24,6 +24,25 @@ the import screen.
 | `Meta: _econur_ingredients` | 5 — What's inside | **One ingredient per line** |
 | `Meta: _econur_best_for` | 6 — Best for | **One tag per line** |
 | `Meta: _econur_usage` | 7 — Usage & storage | Free text; blank lines preserved |
+| `Meta: _econur_skin_concern_names` | Homepage filter + 9 — Related | **Comma-separated** on ONE line (not newline-delimited) |
+
+### The skin_concern column is not a normal meta field
+
+WooCommerce's importer has **no support for custom taxonomies** — it handles
+`category_ids` (Categories) and `tag_ids` (Tags) and nothing else. There is no
+`tax:skin_concern` column; that would silently import nothing.
+
+The theme works around this in `inc/import.php`: the column arrives as ordinary
+post meta, and `woocommerce_product_import_inserted_product_object` converts it
+into real `skin_concern` terms and then deletes the temporary meta. Missing terms
+are created automatically.
+
+Two consequences:
+
+- This column is **comma-separated on a single line**, unlike the newline-delimited
+  fields above.
+- It only works while the Econur theme is active. Importing with another theme
+  enabled leaves the value stranded as unused meta.
 
 Section 2 (the long-form intro) comes from Woo's own **Description** field, not
 from meta. To bulk-fill it too, add a plain `Description` column.
@@ -78,3 +97,23 @@ field is blank, so a partial fill degrades cleanly.
 The `ECON-ADB` row is **PLACEHOLDER** copy written to demonstrate the format. The
 ingredient and efficacy claims are illustrative, not verified brand or product
 facts. Replace it before importing — do not ship it as real content.
+
+
+---
+
+## Why the concern terms overlap
+
+Related products (section 9 of the product page) matches on **shared** `skin_concern`
+terms. If every product carried a unique concern, every Related section would be empty.
+
+The shipped terms are chosen so each product links to at least one other:
+
+| Product | Links to |
+|---|---|
+| p1 Active Defense | p3, p5 (Acne & Breakouts, Oily Skin) |
+| p2 Licorice Brightening | p5 (Dullness) |
+| p3 Herbifresh | p1, p4, p5 |
+| p4 Olivelle | p3 (Itching & Irritation) |
+| p5 Caffiend | p1, p2, p3 |
+
+If you rewrite these terms, keep some overlap or Related products goes blank.

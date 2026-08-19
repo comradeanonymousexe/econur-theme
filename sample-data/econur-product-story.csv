@@ -1,4 +1,4 @@
-SKU,Description,Meta: _econur_positioning,Meta: _econur_benefits,Meta: _econur_efficacy,Meta: _econur_ingredients,Meta: _econur_best_for,Meta: _econur_usage
+SKU,Description,Meta: _econur_positioning,Meta: _econur_benefits,Meta: _econur_efficacy,Meta: _econur_ingredients,Meta: _econur_best_for,Meta: _econur_usage,Meta: _econur_skin_concern_names
 p1,"Most bars built for oily skin work by stripping it. Yours ends up tight and squeaky for an hour, then produces more oil than it started with. The Active Defense Bar is formulated around that exact problem.
 
 Activated charcoal and neem do the heavy lifting: charcoal binds to the excess sebum sitting deep in your pores and pulls it out, while neem's anti-microbial compounds go after the bacteria driving your breakouts. Tea tree essential oil handles fungal acne and the inflammation that comes with an active flare-up, and tulsi works underneath all of it to keep sebum production steady.
@@ -31,7 +31,7 @@ Daily face and body cleansing","Wet the bar and work up a lather in your hands, 
 
 Keep the bar on a draining soap dish, out of standing water and away from direct spray. A handmade bar that dries fully between washes lasts noticeably longer.
 
-Not suited for: dry or very dry skin, babies, or highly sensitive skin."
+Not suited for: dry or very dry skin, babies, or highly sensitive skin.","Acne & Breakouts, Oily Skin, Fungal Acne, Body Odour"
 p2,"Pigmentation does not lift overnight, and any bar that claims otherwise is selling you something. This one works the way skin actually responds: gradually, with consistent use.
 
 Licorice is the active that matters here. It is one of the most effective natural ingredients on melasma, acne scarring and general pigmentation, and it works by evening tone out rather than bleaching it. Wild turmeric lifts tan and dullness alongside it, while honey holds moisture at the surface so skin looks vibrant instead of tight after washing.
@@ -69,7 +69,7 @@ Pigmentation responds gradually. Give the bar consistent daily use over several 
 
 Store on a draining soap dish away from standing water so the bar dries fully between washes.
 
-Not suited for: extremely dry skin, babies, or highly sensitive skin."
+Not suited for: extremely dry skin, babies, or highly sensitive skin.","Pigmentation & Dark Spots, Tanning & Sun Damage, Dullness, Acne Marks"
 p3,"Fourteen ingredients, and almost all of them are doing a job. The Herbifresh Bar is the herbalist's bar in the range - a natural disinfectant that still leaves skin fed rather than bare.
 
 Neem and green tea handle the antibacterial work, clearing away germs and going after the bacteria behind breakouts. Moringa brings the vitamins and nourishment back in. Ground oats exfoliate gently enough for daily use while doubling as a soothing agent, and blackseed oil and tulsi work on mild allergies, itching and the red spots they leave behind.
@@ -109,7 +109,7 @@ Herbal, fragrance-free routines","Lather in your hands and massage onto damp ski
 
 Store on a draining soap dish away from standing water and direct spray so the bar dries fully between washes.
 
-Not suited for: extremely dry skin or highly sensitive skin."
+Not suited for: extremely dry skin or highly sensitive skin.","Acne & Breakouts, Combination Skin, Itching & Irritation, Dead Skin"
 p4,"This is, first and last, an olive oil bathing bar. Over 80% of it is olive oil - and that single fact is what makes it safe for the most delicate skin in your house.
 
 Olive oil is rich in oleic acid and carries a conditioning value above 80, which means it holds moisture in the skin instead of pulling it out. At this concentration the bar is extremely mild. It does not dry skin out, it does not sting, and it leaves the skin soft rather than tight.
@@ -140,7 +140,7 @@ Daily gentle bathing","For babies and children: work up a lather in your hands f
 
 For very dry or sensitive adult skin: lather, massage onto damp skin, rinse thoroughly. Gentle enough for daily use, morning and night.
 
-Store on a draining soap dish out of standing water. A bar that dries fully between washes lasts noticeably longer."
+Store on a draining soap dish out of standing water. A bar that dries fully between washes lasts noticeably longer.","Dry Skin, Sensitive Skin, Baby Skin, Itching & Irritation, Prickly Heat"
 p5,"A scrub bar that does not feel like sandpaper. The Caffiend Bar is built on ground coffee and coffee water, with almond oil and milk conditioning underneath so the exfoliation never leaves skin raw.
 
 The coffee does two jobs at once. Chemically, its compounds draw excess oil and trapped dirt out of the skin and keep pores clear, and its anti-inflammatory and antibacterial action works against acne-causing bacteria while calming redness. Physically, the grounds lift away dead skin cells - which is what brings a vibrant surface back to dull, congested skin.
@@ -175,4 +175,4 @@ Two or three times a week is enough for most people. Daily scrubbing can leave e
 
 Store on a draining soap dish away from standing water so the bar dries fully between washes.
 
-Not suited for: dry or very dry skin, babies, or highly sensitive skin."
+Not suited for: dry or very dry skin, babies, or highly sensitive skin.","Oily Skin, Combination Skin, Dead Skin, Dullness"

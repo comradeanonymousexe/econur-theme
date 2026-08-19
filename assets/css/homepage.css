@@ -16,7 +16,13 @@
   overflow: hidden;
   background: linear-gradient(160deg, var(--pale), var(--sage));
 }
-.econ-showcase__img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+/* The product photos are square (1:1). `object-fit: cover` crops whatever the box
+ * does not match, so the wider the box, the more of the bar gets cut off the top
+ * and bottom — which read as the image being "zoomed in".
+ *
+ * 16/9 showed only ~56% of the photo's height. 4/3 shows ~75%. Widen this ratio to
+ * zoom in again, narrow it toward 1/1 to zoom further out (1/1 = no crop at all). */
+.econ-showcase__img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
 .econ-showcase__badge {
   position: absolute;
   top: var(--space-4);
@@ -42,7 +48,10 @@
 
 @media (min-width: 880px) {
   .econ-showcase__grid { grid-template-columns: 1.05fr 0.95fr; gap: var(--space-6); }
-  .econ-showcase__img { aspect-ratio: 1 / 1; max-height: 60vh; }
+  /* The ratio here is already square, so the crop comes entirely from max-height
+   * capping the box shorter than it is wide. Raising the cap lets more of the
+   * photo through (60vh showed ~73% of it, 72vh shows ~88%). */
+  .econ-showcase__img { aspect-ratio: 1 / 1; max-height: 72vh; }
 }
 
 /* -------------------------------------------------------------------------

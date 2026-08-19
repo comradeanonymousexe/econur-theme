@@ -30,8 +30,22 @@ add_action( 'wp_enqueue_scripts', 'econur_enqueue_assets' );
  */
 function econur_enqueue_assets() {
 
-	// Self-hosted fonts (font-display: swap declared inside).
-	wp_enqueue_style( 'econur-fonts', ECONUR_URI . '/assets/css/fonts.css', array(), econur_asset_ver( 'assets/css/fonts.css' ) );
+	/*
+	 * Google Fonts. The theme originally self-hosted these as .woff2 files, but the
+	 * files were never added, so every face 404'd and the whole site rendered in
+	 * Georgia. Loading from Google trades one extra connection for typography that
+	 * actually works. `display=swap` keeps text visible while the faces load, and
+	 * the resource hints in econur_font_resource_hints() cover the handshake cost.
+	 *
+	 * Weights match the design tokens in style.css — do not add more without a
+	 * reason; each one is another file on the critical path.
+	 */
+	wp_enqueue_style(
+		'econur-fonts',
+		'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@400;600;700&display=swap',
+		array(),
+		null // Google versions the URL itself; a ?ver= param would break their cache.
+	);
 
 	// Tokens + base reset (style.css).
 	wp_enqueue_style( 'econur-tokens', get_stylesheet_uri(), array( 'econur-fonts' ), econur_asset_ver( 'style.css' ) );
@@ -115,19 +129,28 @@ function econur_defer_main_js( $tag, $handle ) {
 }
 
 /**
- * Preload the two above-the-fold font files so text paints fast without a
- * Google Fonts round-trip. (spec §8)
+ * Warm the Google Fonts connections before the stylesheet is requested.
+ *
+ * Two hosts are involved: fonts.googleapis.com serves the CSS, fonts.gstatic.com
+ * serves the .woff2 files. Pre-connecting to gstatic (crossorigin, since fonts are
+ * CORS-fetched) removes a DNS + TLS round-trip from the critical path, which is
+ * most of what self-hosting was buying us.
+ *
+ * @param array  $urls          URLs to print.
+ * @param string $relation_type Hint type being filtered.
+ * @return array
  */
-add_action( 'wp_head', 'econur_preload_fonts', 2 );
-function econur_preload_fonts() {
-	$fonts = array(
-		'/assets/fonts/dmsans-400.woff2',
-		'/assets/fonts/playfairdisplay-600.woff2',
-	);
-	foreach ( $fonts as $font ) {
-		printf(
-			'<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>' . "\n",
-			esc_url( ECONUR_URI . $font )
-		);
+add_filter( 'wp_resource_hints', 'econur_font_resource_hints', 10, 2 );
+function econur_font_resource_hints( $urls, $relation_type ) {
+	if ( 'preconnect' !== $relation_type ) {
+		return $urls;
 	}
+
+	$urls[] = array( 'href' => 'https://fonts.googleapis.com' );
+	$urls[] = array(
+		'href'        => 'https://fonts.gstatic.com',
+		'crossorigin' => 'anonymous',
+	);
+
+	return $urls;
 }
