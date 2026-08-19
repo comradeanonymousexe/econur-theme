@@ -118,13 +118,13 @@ $econ_lcp_done = false; // First image gets fetchpriority high (LCP candidate).
 									<?php if ( $c['positioning'] ) : ?>
 										<p class="econ-showcase__lead"><?php echo esc_html( $c['positioning'] ); ?></p>
 									<?php endif; ?>
-									<div class="econ-showcase__price" data-econ-price>
+									<div class="econ-showcase__price notranslate" translate="no" data-econ-price>
 										<?php echo $econ_init_var ? esc_html( $econ_init_var['price'] ) : wp_kses_post( $c['price_html'] ); ?>
 									</div>
 									<?php if ( ! empty( $c['variations'] ) ) : ?>
 										<div class="econ-sizes" role="group" aria-label="<?php esc_attr_e( 'Choose size', 'econur' ); ?>" data-econ-sizes>
 											<?php foreach ( $c['variations'] as $econ_i => $econ_v ) : ?>
-												<button type="button" class="econ-size<?php echo 0 === $econ_i ? ' is-active' : ''; ?>"
+												<button type="button" class="econ-size notranslate<?php echo 0 === $econ_i ? ' is-active' : ''; ?>" translate="no"
 													data-variation-id="<?php echo esc_attr( $econ_v['id'] ); ?>"
 													data-price="<?php echo esc_attr( $econ_v['price'] ); ?>"
 													aria-pressed="<?php echo 0 === $econ_i ? 'true' : 'false'; ?>">

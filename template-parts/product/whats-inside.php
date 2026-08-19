@@ -28,7 +28,7 @@ if ( empty( $econ_ingredients ) ) {
 	<h2 class="econ-product-h2"><?php esc_html_e( "What's inside", 'econur' ); ?></h2>
 	<ul class="econ-tags">
 		<?php foreach ( $econ_ingredients as $econ_ingredient ) : ?>
-			<li class="econ-tag econ-tag--filled"><?php echo esc_html( $econ_ingredient ); ?></li>
+			<li class="econ-tag econ-tag--filled notranslate" translate="no"><?php echo esc_html( $econ_ingredient ); ?></li>
 		<?php endforeach; ?>
 	</ul>
 </section>

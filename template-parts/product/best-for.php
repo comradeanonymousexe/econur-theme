@@ -23,7 +23,7 @@ if ( empty( $econ_best_for ) ) {
 	<h2 class="econ-product-h2"><?php esc_html_e( 'Best for', 'econur' ); ?></h2>
 	<ul class="econ-tags">
 		<?php foreach ( $econ_best_for as $econ_tag ) : ?>
-			<li class="econ-tag"><?php echo esc_html( $econ_tag ); ?></li>
+			<li class="econ-tag notranslate" translate="no"><?php echo esc_html( $econ_tag ); ?></li>
 		<?php endforeach; ?>
 	</ul>
 </section>
