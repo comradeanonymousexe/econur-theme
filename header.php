@@ -67,9 +67,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</nav>
 
 		<div class="econ-header__actions">
-			<a class="econ-icon-btn" href="<?php echo esc_url( home_url( '/#shop' ) ); ?>" aria-label="<?php esc_attr_e( 'Search soaps', 'econur' ); ?>">
-				<?php econur_icon( 'search' ); ?>
-			</a>
+			<?php
+			/*
+			 * Language switcher (GTranslate). Rendered here so it sits with the other
+			 * header controls instead of floating over the page. Only output when the
+			 * plugin is actually active — otherwise the slot stays empty and nothing
+			 * is hidden. The CSS in components.css turns GTranslate's 173px-wide
+			 * "flag + language name" control into a 44px icon button.
+			 */
+			if ( shortcode_exists( 'gtranslate' ) ) {
+				echo '<div class="econ-lang">' . do_shortcode( '[gtranslate]' ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- shortcode output is plugin-generated markup.
+			}
+			?>
 			<?php
 			// Account entry point. Purely an entry point — the cart and checkout
 			// beside it stay fully open to guests (spec §5, §6).

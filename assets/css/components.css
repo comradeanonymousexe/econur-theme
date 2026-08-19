@@ -458,3 +458,95 @@
 /* Buy-button feedback (Order + Add) */
 .econ-btn.is-loading { opacity: 0.7; pointer-events: none; }
 .econ-add.is-added { background: var(--emerald-dark); color: var(--white); border-color: var(--emerald-dark); }
+
+/* ---------- Header language switcher (GTranslate) ------------------------- */
+/* GTranslate's "Dropdown" widget ships a 173px control that floats over the page
+ * (position:fixed) and shows "🇬🇧 English ▾". We want a 44px icon button sitting
+ * with the account and cart controls, so these rules restyle the plugin's own
+ * markup rather than replacing it — the plugin's JS keeps working untouched.
+ *
+ * !important is used deliberately: GTranslate injects its stylesheet inline at
+ * render time, at equal specificity to ours, so source order alone is unreliable.
+ * Its container class carries a random suffix (.gt_container-o30nwx) that changes
+ * if the widget is reconfigured, so nothing here depends on it. */
+
+.econ-lang { display: inline-flex; align-items: center; }
+
+/* If the plugin ALSO renders its floating widget, hide that copy — but only when
+ * our in-header instance actually exists, so a misconfigured plugin never leaves
+ * the visitor with no switcher at all. */
+body:has(.econ-lang .gt_switcher) > .gtranslate_wrapper { display: none !important; }
+
+.econ-lang .gt_switcher_wrapper {
+  position: static !important;
+  inset: auto !important;
+  z-index: auto !important;
+}
+.econ-lang #google_translate_element2 { display: none !important; }
+
+.econ-lang .gt_switcher {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  line-height: normal;
+  overflow: visible;          /* default is hidden, which would clip the dropdown */
+  font-family: var(--font-body);
+}
+
+/* --- Closed state: a 44px icon button matching .econ-icon-btn --- */
+.econ-lang .gt_switcher .gt_selected { background: none !important; position: static !important; }
+.econ-lang .gt_switcher .gt_selected a {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 44px !important;
+  height: 44px;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: var(--radius-pill);
+  background: transparent !important;
+  font-size: 0 !important;    /* hides the language NAME text node */
+  transition: background var(--transition);
+}
+.econ-lang .gt_switcher .gt_selected a:hover { background: var(--pale) !important; }
+.econ-lang .gt_switcher .gt_selected a:focus-visible { background: var(--pale) !important; }
+.econ-lang .gt_switcher .gt_selected a::after { display: none !important; }  /* chevron */
+.econ-lang .gt_switcher .gt_selected a img {
+  width: 22px !important;
+  height: 22px !important;
+  opacity: 1 !important;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--glass-border);
+}
+
+/* --- Open state: themed panel anchored under the button ---
+ * `height` is animated inline by GTranslate's own JS, so it is left alone here. */
+.econ-lang .gt_switcher .gt_option {
+  position: absolute !important;
+  top: calc(100% + 6px);
+  inset-inline-end: 0;
+  width: 190px !important;
+  max-height: 260px !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--radius-card);
+  background: var(--white) !important;
+  box-shadow: var(--shadow-md);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: calc(var(--z-header) + 5);
+}
+.econ-lang .gt_switcher .gt_option a {
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px !important;
+  font-size: var(--fs-sm) !important;
+  color: var(--text-dark) !important;
+}
+.econ-lang .gt_switcher .gt_option a:hover { background: var(--pale) !important; }
+.econ-lang .gt_switcher .gt_option a img {
+  width: 20px !important;
+  height: 20px !important;
+  opacity: 1 !important;
+  border-radius: 50%;
+}
