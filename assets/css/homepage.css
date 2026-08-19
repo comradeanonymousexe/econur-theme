@@ -175,6 +175,7 @@
   line-height: 1.15;
   color: var(--text-dark);
   margin: 0 0 6px;
+  text-align: center;
 }
 .econ-home-head__title--greeting { color: var(--forest); }
 .econ-home-head__sub {

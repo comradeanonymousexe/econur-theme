@@ -46,16 +46,16 @@ if ( $econ_user ) {
 				?>
 			</h1>
 			<p class="econ-home-head__sub">
-				<?php esc_html_e( 'Good to see you again. Here is what is fresh from the workshop.', 'econur' ); ?>
+				<?php esc_html_e( 'Good to see you again. Browse premium handmade skincare made for you', 'econur' ); ?>
 			</p>
 
 		<?php else : ?>
 
 			<h1 class="econ-home-head__title">
-				<?php esc_html_e( '100% natural soap, verified pure.', 'econur' ); ?>
+				<?php esc_html_e( '100% natural skincare, verified pure.', 'econur' ); ?>
 			</h1>
 			<p class="econ-home-head__sub">
-				<?php esc_html_e( 'Cold-pressed oils and plant botanicals, handmade in Bangladesh — and lab-verified, not just claimed.', 'econur' ); ?>
+				<?php esc_html_e( 'Cold-pressed oils and plant botanicals, handmade in Bangladesh and lab-verified.', 'econur' ); ?>
 			</p>
 
 		<?php endif; ?>

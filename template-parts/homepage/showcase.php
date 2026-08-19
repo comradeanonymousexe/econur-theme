@@ -23,9 +23,9 @@ if ( empty( $econ_offers ) && empty( $econ_featured ) ) {
 	<section class="econ-showcase econ-showcase--empty">
 		<div class="econ-container econ-showcase__empty-inner">
 			<span class="econ-eyebrow"><?php esc_html_e( 'Handcrafted in Bangladesh', 'econur' ); ?></span>
-			<h1 class="econ-showcase__title"><?php esc_html_e( '100% natural soap, verified pure.', 'econur' ); ?></h1>
+			<h1 class="econ-showcase__title"><?php esc_html_e( '100% natural skincare, verified pure.', 'econur' ); ?></h1>
 			<p class="econ-showcase__lead"><?php esc_html_e( 'Cold-pressed oils and plant botanicals — lab-verified TFM, nil free alkali. Kind to skin, honest by nature.', 'econur' ); ?></p>
-			<a class="econ-btn econ-btn--order econ-btn--lg" href="#shop"><?php esc_html_e( 'Shop all soaps', 'econur' ); ?></a>
+			<a class="econ-btn econ-btn--order econ-btn--lg" href="#shop"><?php esc_html_e( 'View Shop', 'econur' ); ?></a>
 		</div>
 	</section>
 	<?php

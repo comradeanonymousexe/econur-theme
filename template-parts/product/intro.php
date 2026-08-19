@@ -22,7 +22,7 @@ if ( '' === trim( (string) $econ_desc ) ) {
 }
 ?>
 <section class="econ-product-section">
-	<h2 class="econ-product-h2"><?php esc_html_e( 'About this bar', 'econur' ); ?></h2>
+	<h2 class="econ-product-h2"><?php esc_html_e( 'About this', 'econur' ); ?></h2>
 	<div class="econ-prose">
 		<?php echo apply_filters( 'the_content', $econ_desc ); // phpcs:ignore WordPress.Security.EscapeOutput -- the_content filter handles sanitisation. ?>
 	</div>

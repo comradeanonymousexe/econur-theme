@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<h2 class="econ-cta__title"><?php esc_html_e( 'Give your skin the honest bar.', 'econur' ); ?></h2>
 		<p class="econ-cta__sub"><?php esc_html_e( 'Cash on delivery, nationwide. We call within 12 hours to confirm every order.', 'econur' ); ?></p>
 		<div class="econ-cta__actions">
-			<a class="econ-btn econ-btn--light econ-btn--lg" href="#shop"><?php esc_html_e( 'Shop all soaps', 'econur' ); ?></a>
+			<a class="econ-btn econ-btn--light econ-btn--lg" href="#shop"><?php esc_html_e( 'Shop all', 'econur' ); ?></a>
 			<?php if ( function_exists( 'wc_get_cart_url' ) ) : ?>
 				<a class="econ-btn econ-btn--ghost econ-btn--lg econ-cta__ghost" href="<?php echo esc_url( wc_get_cart_url() ); ?>"><?php esc_html_e( 'View cart', 'econur' ); ?></a>
 			<?php endif; ?>

@@ -28,7 +28,7 @@ $econ_init_var_id = ! empty( $econ_data['variations'] ) ? $econ_data['variations
 			printf( esc_html__( 'Ready to try %s?', 'econur' ), econur_notranslate( $econ_product->get_name() ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- format string escaped, name escaped inside the helper.
 			?>
 		</h2>
-		<p class="econ-product-cta__sub"><?php esc_html_e( 'Honest, lab-verified soap. Cash on delivery, nationwide across Bangladesh.', 'econur' ); ?></p>
+		<p class="econ-product-cta__sub"><?php esc_html_e( 'Honest, lab-verified skincare. Cash on delivery, nationwide across Bangladesh.', 'econur' ); ?></p>
 
 		<div class="econ-product-cta__actions">
 			<?php if ( $econ_data['purchasable'] ) : ?>
@@ -43,7 +43,7 @@ $econ_init_var_id = ! empty( $econ_data['variations'] ) ? $econ_data['variations
 					<?php esc_html_e( 'Add to Cart', 'econur' ); ?>
 				</button>
 			<?php else : ?>
-				<a class="econ-btn econ-btn--light econ-btn--lg" href="<?php echo esc_url( home_url( '/#shop' ) ); ?>"><?php esc_html_e( 'Browse all soaps', 'econur' ); ?></a>
+				<a class="econ-btn econ-btn--light econ-btn--lg" href="<?php echo esc_url( home_url( '/#shop' ) ); ?>"><?php esc_html_e( 'Browse all products', 'econur' ); ?></a>
 			<?php endif; ?>
 		</div>
 	</div>

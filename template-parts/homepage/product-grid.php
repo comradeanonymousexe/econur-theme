@@ -37,14 +37,14 @@ $econ_concern_terms = get_terms( array( 'taxonomy' => 'skin_concern', 'hide_empt
 
 		<header class="econ-grid-head">
 			<div class="econ-grid-head__intro">
-				<span class="econ-eyebrow"><?php esc_html_e( 'Our Soaps', 'econur' ); ?></span>
+				<span class="econ-eyebrow"><?php esc_html_e( 'Our Natural Products', 'econur' ); ?></span>
 				<h2 class="econ-grid-head__title"><?php esc_html_e( 'Find your blend', 'econur' ); ?></h2>
 			</div>
 			<label class="econ-search">
-				<span class="screen-reader-text"><?php esc_html_e( 'Search soaps', 'econur' ); ?></span>
+				<span class="screen-reader-text"><?php esc_html_e( 'Search Natural Products', 'econur' ); ?></span>
 				<?php econur_icon( 'search', 'econ-search__icon' ); ?>
 				<input type="search" class="econ-search__input" data-econ-search
-					placeholder="<?php esc_attr_e( 'Search soaps, ingredients…', 'econur' ); ?>" autocomplete="off">
+					placeholder="<?php esc_attr_e( 'Search products, ingredients…', 'econur' ); ?>" autocomplete="off">
 			</label>
 		</header>
 
@@ -95,7 +95,7 @@ $econ_concern_terms = get_terms( array( 'taxonomy' => 'skin_concern', 'hide_empt
 				endforeach;
 				?>
 			</div>
-			<p class="econ-grid-empty" data-econ-grid-empty hidden><?php esc_html_e( 'No soaps match your filters.', 'econur' ); ?></p>
+			<p class="econ-grid-empty" data-econ-grid-empty hidden><?php esc_html_e( 'No products match your filters.', 'econur' ); ?></p>
 			<p class="screen-reader-text" role="status" aria-live="polite" data-econ-grid-status></p>
 		<?php endif; ?>
 	</div>
