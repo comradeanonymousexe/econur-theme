@@ -165,7 +165,7 @@ function econur_time_greeting() {
 function econur_primary_menu_fallback() {
 	echo '<ul class="econ-nav__list">';
 	printf( '<li><a href="%s">%s</a></li>', esc_url( home_url( '/' ) ), esc_html__( 'Shop', 'econur' ) );
-	printf( '<li><a href="%s">%s</a></li>', esc_url( home_url( '/#shop' ) ), esc_html__( 'All Soaps', 'econur' ) );
+	printf( '<li><a href="%s">%s</a></li>', esc_url( home_url( '/#shop' ) ), esc_html__( 'All Products', 'econur' ) );
 
 	$lab = get_page_by_path( 'lab-report' );
 	if ( $lab ) {

@@ -55,7 +55,7 @@ while ( have_posts() ) :
 			<div class="econ-lab-explainers">
 				<div class="econ-lab-explainer">
 					<h2 class="econ-lab-explainer__title"><?php echo econur_notranslate_terms( esc_html__( 'Unmatched nourishment (75%–86% TFM)', 'econur' ), econur_untranslatable_terms() ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped before term wrapping. */ ?></h2>
-					<p><?php esc_html_e( 'The industry standard for a quality soap is a minimum of 75% Total Fatty Matter. Econur reaches up to 86% — a creamy, decadent lather that cleanses thoroughly without stripping your skin of its natural moisture.', 'econur' ); ?></p>
+					<p><?php esc_html_e( 'The industry standard for a quality face bar is a minimum of 75% Total Fatty Matter. Econur reaches up to 86% — a creamy, decadent lather that cleanses thoroughly without stripping your skin of its natural moisture.', 'econur' ); ?></p>
 				</div>
 				<div class="econ-lab-explainer">
 					<h2 class="econ-lab-explainer__title"><?php esc_html_e( 'Pure & gentle (free alkali: nil)', 'econur' ); ?></h2>
@@ -65,7 +65,7 @@ while ( have_posts() ) :
 		</section>
 
 		<section class="econ-container econ-lab-section">
-			<h2 class="econ-lab-h2"><?php esc_html_e( 'Natural artisanal soap vs. chemical "beauty bars"', 'econur' ); ?></h2>
+			<h2 class="econ-lab-h2"><?php esc_html_e( 'Natural artisanal bar vs. chemical "beauty soaps"', 'econur' ); ?></h2>
 			<div class="econ-compare-wrap">
 				<table class="econ-compare">
 					<thead>
