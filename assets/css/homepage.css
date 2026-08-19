@@ -181,7 +181,6 @@
 .econ-home-head__sub {
   color: var(--text-mid);
   margin: 0;
-  max-width: 56ch;
   font-size: var(--fs-sm);
   text-align: center;
 }
